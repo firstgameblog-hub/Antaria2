@@ -6,8 +6,11 @@ import { checkChapterQuest } from './quests.js';
 
 export const REPAIR_COST = 4;
 export const REPAIR_STEP = 0.1;
+export const REPAIR_SECONDS = 3.4;
 
-/** Целостность частокола: 0–1. */
+/** Активная починка: одна за раз. */
+let activeRepair = null;
+
 function palisadeIntegrity(state = store.state) {
   return state.buildings.palisade?.integrity ?? 0;
 }
@@ -21,7 +24,23 @@ export function canRepair() {
   return palisadeIntegrity(state) < 1 && (state.resources.branch ?? 0) >= REPAIR_COST;
 }
 
-export function repairPalisade() {
+export function getActiveRepair() {
+  if (!activeRepair) return null;
+
+  const progress = Math.min(
+    1,
+    (performance.now() - activeRepair.startedAt) / activeRepair.duration,
+  );
+
+  return { progress };
+}
+
+export function startRepair() {
+  if (activeRepair) {
+    bus.emit('ui:toast', 'Сначала закончите текущую работу.');
+    return false;
+  }
+
   const state = store.state;
 
   if (palisadeIntegrity(state) >= 1) {
@@ -32,6 +51,57 @@ export function repairPalisade() {
   if ((state.resources.branch ?? 0) < REPAIR_COST) {
     bus.emit('ui:toast', `Нужно ${REPAIR_COST} ветки.`);
     return false;
+  }
+
+  activeRepair = {
+    startedAt: performance.now(),
+    duration: REPAIR_SECONDS * 1000,
+    intervalId: 0,
+    timeoutId: 0,
+  };
+
+  bus.emit('repair:started');
+
+  activeRepair.intervalId = window.setInterval(() => {
+    if (!activeRepair) return;
+
+    const progress = Math.min(
+      1,
+      (performance.now() - activeRepair.startedAt) / activeRepair.duration,
+    );
+
+    bus.emit('repair:progress', { progress });
+
+    if (progress >= 1) finishRepair();
+  }, 100);
+
+  activeRepair.timeoutId = window.setTimeout(() => {
+    if (activeRepair) finishRepair();
+  }, activeRepair.duration);
+
+  return true;
+}
+
+function finishRepair() {
+  if (!activeRepair) return;
+
+  const job = activeRepair;
+  activeRepair = null;
+
+  clearInterval(job.intervalId);
+  clearTimeout(job.timeoutId);
+
+  const state = store.state;
+
+  if (palisadeIntegrity(state) >= 1) {
+    bus.emit('repair:finished', { cancelled: true });
+    return;
+  }
+
+  if ((state.resources.branch ?? 0) < REPAIR_COST) {
+    bus.emit('repair:finished', { cancelled: true });
+    bus.emit('ui:toast', 'Ветки закончились — починка остановлена.');
+    return;
   }
 
   store.update((current) => {
@@ -47,13 +117,23 @@ export function repairPalisade() {
     );
   });
 
-  bus.emit(
-    'ui:toast',
-    `Частокол у ворот починен: ${palisadePercent()}%.`,
-  );
+  bus.emit('repair:finished');
+  bus.emit('ui:toast', `Частокол у ворот починен: ${palisadePercent()}%.`);
 
   checkChapterQuest();
-  return true;
+}
+
+/** Прервать починку (загрузка сохранения, новая игра). */
+export function cancelRepair() {
+  if (!activeRepair) return;
+
+  const { intervalId, timeoutId } = activeRepair;
+  activeRepair = null;
+
+  clearInterval(intervalId);
+  clearTimeout(timeoutId);
+
+  bus.emit('repair:finished', { cancelled: true });
 }
 
 /**

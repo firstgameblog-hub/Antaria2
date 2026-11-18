@@ -71,6 +71,7 @@ export function createInitialState() {
 
     stats: {
       herbGathered: 0,
+      berryGathered: 0,
       coinsEarned: 0,
     },
 

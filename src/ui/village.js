@@ -13,10 +13,13 @@ import {
 import { getQuestView } from '../systems/quests.js';
 import {
   REPAIR_COST,
+  REPAIR_SECONDS,
   REPAIR_STEP,
   canRepair,
+  cancelRepair,
+  getActiveRepair,
   palisadePercent,
-  repairPalisade,
+  startRepair,
 } from '../systems/village.js';
 import { openBook } from './book.js';
 import { openHerbalist } from './dialogue.js';
@@ -38,8 +41,9 @@ const ACTIONS = {
     disabled: () => !canRepair(),
     hint: () =>
       `Целостность: ${palisadePercent()}%. Ремонт добавляет ` +
-      `${Math.round(REPAIR_STEP * 100)}%. Веток при себе: ${store.state.resources.branch ?? 0}.`,
-    run: () => repairPalisade(),
+      `${Math.round(REPAIR_STEP * 100)}% и занимает ${REPAIR_SECONDS} с. ` +
+      `Веток при себе: ${store.state.resources.branch ?? 0}.`,
+    run: () => startRepair(),
   },
 
   open_craft: {
@@ -173,6 +177,47 @@ function updateGatherProgress({ nodeId, progress }) {
   if (label) label.textContent = `${percent}%`;
 }
 
+function renderRepairProgress(active) {
+  const percent = Math.round(active.progress * 100);
+
+  const wrap = el('div', 'action-progress');
+
+  const status = el('div', 'gather-status');
+  status.append(el('span', '', 'Чиню частокол…'));
+
+  const percentNode = el('span', 'gather-percent', `${percent}%`);
+  percentNode.dataset.repairPercent = '';
+  status.append(percentNode);
+
+  const bar = el('div', 'gather-bar');
+  bar.setAttribute('role', 'progressbar');
+  bar.setAttribute('aria-valuemin', '0');
+  bar.setAttribute('aria-valuemax', '100');
+  bar.setAttribute('aria-valuenow', String(percent));
+
+  const fill = el('span', 'gather-fill');
+  fill.dataset.repairFill = '';
+  fill.style.width = `${percent}%`;
+  bar.append(fill);
+
+  wrap.append(status, bar);
+  return wrap;
+}
+
+function updateRepairProgress({ progress }) {
+  const percent = Math.round(progress * 100);
+
+  const fill = document.querySelector('[data-repair-fill]');
+  const label = document.querySelector('[data-repair-percent]');
+
+  if (fill) {
+    fill.style.width = `${percent}%`;
+    fill.closest('.gather-bar')?.setAttribute('aria-valuenow', String(percent));
+  }
+
+  if (label) label.textContent = `${percent}%`;
+}
+
 function renderLocationPanel() {
   const host = document.querySelector('[data-location-panel]');
   const location = LOCATIONS[selected];
@@ -195,10 +240,12 @@ function renderLocationPanel() {
 
   if (location.actions?.length) {
     const row = el('div', 'action-row');
+    const repairing = getActiveRepair();
 
     for (const id of location.actions) {
       const action = ACTIONS[id];
       if (!action) continue;
+      if (id === 'repair_palisade' && repairing) continue;
 
       const label = typeof action.label === 'function' ? action.label() : action.label;
       const button = el('button', 'btn', label);
@@ -210,7 +257,11 @@ function renderLocationPanel() {
 
     children.push(row);
 
+    if (repairing) children.push(renderRepairProgress(repairing));
+
     for (const id of location.actions) {
+      if (id === 'repair_palisade' && repairing) continue;
+
       const action = ACTIONS[id];
       if (!action?.hint) continue;
 
@@ -275,7 +326,15 @@ export function initVillage() {
   bus.on('gather:started', render);
   bus.on('gather:finished', render);
   bus.on('gather:progress', updateGatherProgress);
-  bus.on('state:loaded', cancelGather);
+
+  bus.on('repair:started', render);
+  bus.on('repair:finished', render);
+  bus.on('repair:progress', updateRepairProgress);
+
+  bus.on('state:loaded', () => {
+    cancelGather();
+    cancelRepair();
+  });
 
   render();
 }

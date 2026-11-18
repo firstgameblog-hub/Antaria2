@@ -20,6 +20,7 @@ import { initChronicle } from './ui/chronicle.js';
 import { initPanels, openTab } from './ui/panels.js';
 import { initScene } from './ui/scene.js';
 import { initVillage } from './ui/village.js';
+import { initStage } from './ui/stage.js';
 import { initInventory } from './ui/inventory.js';
 import { initCraft } from './ui/craft.js';
 import { initBuildings } from './ui/buildings.js';
@@ -227,6 +228,7 @@ function boot() {
   initChronicle();
   initScene();
   initVillage();
+  initStage();
   initInventory();
   initCraft();
   initBuildings();

@@ -81,6 +81,8 @@
           <ul class="resources" data-hud="resources"></ul>
 
           <section class="quest-card" data-quest></section>
+
+          <section class="stage-card" data-stage-card></section>
         </aside>
       </div>
     </section>
@@ -235,6 +237,16 @@
       <p class="sleep-kicker" data-sleep-kicker>Ночь</p>
       <p class="sleep-title" data-sleep-title>День 1 уходит</p>
       <p class="sleep-text" data-sleep-text>Деревня засыпает. Слышно, как ветер ходит по крышам.</p>
+      <div class="sleep-progress" aria-hidden="true"><span></span></div>
+    </div>
+  </div>
+
+  <div class="sleep-overlay stage-overlay" data-overlay="stage" hidden>
+    <div class="sleep-card" role="status" aria-live="polite">
+      <div class="sleep-orb" aria-hidden="true"></div>
+      <p class="sleep-kicker" data-stage-kicker>Глава II</p>
+      <p class="sleep-title" data-stage-title>Долг</p>
+      <p class="sleep-text" data-stage-text>Деревня переходит на новую стадию.</p>
       <div class="sleep-progress" aria-hidden="true"><span></span></div>
     </div>
   </div>

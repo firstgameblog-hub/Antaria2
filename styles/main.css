@@ -806,6 +806,10 @@ body.is-modal {
   transition: width 0.12s linear;
 }
 
+.action-progress {
+  margin-top: 14px;
+}
+
 .node-card .btn {
   flex-shrink: 0;
 }
@@ -968,6 +972,37 @@ body.is-modal {
 
 .build-card .ingredients {
   margin-top: 12px;
+}
+
+.stage-card {
+  margin-top: 18px;
+}
+
+.stage-card.is-ready {
+  border-color: var(--gold);
+}
+
+.stage-next {
+  margin: 0 0 2px;
+  font-size: 18px;
+  color: var(--ink-bright);
+}
+
+.stage-card .muted {
+  margin-bottom: 8px;
+}
+
+.stage-button {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.stage-overlay {
+  z-index: 45;
+}
+
+.stage-overlay.is-active .sleep-progress span {
+  animation-duration: 6.2s;
 }
 
 .elder-hut-l2,

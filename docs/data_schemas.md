@@ -127,15 +127,26 @@
   chapter: 'Пробуждение',
   summary: 'Короткое состояние деревни.',
   unlocks: ['Сбор трав', 'Отвар'],
-  requirements: ['150 трав и ягод', '300 монет']
+  requirements: ['40 трав и ягод', '60 монет'],
+  goals: [
+    { id: 'gather', type: 'stats', stats: ['herbGathered', 'berryGathered'], amount: 40, label: 'Собрать 40 трав и ягод' },
+    { id: 'coins', type: 'stat', stat: 'coinsEarned', amount: 60, label: 'Заработать 60 серебра' },
+    { id: 'quest', type: 'quests', amount: 1, label: 'Выполнить поручение' },
+    { id: 'palisade', type: 'building', building: 'palisade', field: 'integrity', amount: 0.7, label: 'Починить частокол' }
+  ]
 }
 ```
 
 Правила:
 
 - Ключи — числа 1–7 без пропусков.
-- `requirements` — человекочитаемые условия; точные проверки появятся
-  на этапе 3 и будут ссылаться на те же поля.
+- `requirements` — человекочитаемые условия для документов.
+- `goals` — машинные условия перехода; типы: `stats` (сумма счётчиков),
+  `stat` (один счётчик), `quests` (число закрытых квестов), `building`
+  (поле постройки).
+- Если `goals` нет, переход на эту стадию ещё не открыт.
+- При переходе меняется `state.stage`, пишется запись в хронику и
+  подгружается набор `svg/stage-N/map.svg`.
 
 ## 6. Локация (`data/locations.js`)
 
@@ -274,7 +285,7 @@ state.nodes = {
     "population": 20,
     "time": { "day": 1, "minutes": 480, "speed": 1, "paused": false, "uiPaused": false },
     "player": { "name": "Зар", "strength": 2, "agility": 2, "trade": 3, "trust": 0 },
-    "stats": { "herbGathered": 0, "coinsEarned": 0 },
+    "stats": { "herbGathered": 0, "berryGathered": 0, "coinsEarned": 0 },
     "resources": { "herb": 0, "berry": 0, "branch": 2, "coin": 15 },
     "buildings": {
       "elder_hut": { "level": 1, "count": 1 },

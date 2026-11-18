@@ -175,6 +175,26 @@ export function validateData() {
     problems.push('Глава 1: нет страниц');
   }
 
+  for (const stage of Object.values(STAGES)) {
+    for (const goal of stage.goals ?? []) {
+      if (!goal.label) {
+        problems.push(`Стадия ${stage.id}: у цели нет описания`);
+      }
+
+      if (!Number.isFinite(goal.amount) || goal.amount <= 0) {
+        problems.push(`Стадия ${stage.id}: некорректная цель "${goal.id}"`);
+      }
+
+      if (!['stats', 'stat', 'quests', 'building'].includes(goal.type)) {
+        problems.push(`Стадия ${stage.id}: неизвестный тип цели "${goal.type}"`);
+      }
+
+      if (goal.type === 'building' && !BUILDINGS[goal.building]) {
+        problems.push(`Стадия ${stage.id}: нет постройки "${goal.building}" в цели`);
+      }
+    }
+  }
+
   const stageIds = Object.values(STAGES)
     .map((stage) => stage.id)
     .sort((a, b) => a - b);

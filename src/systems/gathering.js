@@ -121,6 +121,10 @@ function finishGather() {
     if (node.resource === 'herb') {
       state.stats.herbGathered += job.charges;
     }
+
+    if (node.resource === 'berry') {
+      state.stats.berryGathered = (state.stats.berryGathered ?? 0) + job.charges;
+    }
   });
 
   bus.emit('gather:finished', { nodeId: job.nodeId });
