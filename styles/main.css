@@ -1421,7 +1421,7 @@ body.is-modal {
 }
 
 .sleep-overlay.is-active .sleep-progress span {
-  animation: sleep-fill 4.2s linear forwards;
+  animation: sleep-fill 6.2s linear forwards;
 }
 
 @keyframes sleep-fill {

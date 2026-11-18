@@ -8,9 +8,9 @@ import { advanceToMorning } from '../systems/village.js';
 import { lockTime, unlockTime } from './overlay.js';
 import { toast } from './toast.js';
 
-const NIGHT_MS = 2300;
-const FADE_OUT_MS = 4300;
-const TOTAL_MS = 5000;
+const NIGHT_MS = 3300;
+const FADE_OUT_MS = 6300;
+const TOTAL_MS = 7000;
 
 let active = false;
 let timers = [];
