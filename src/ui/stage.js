@@ -2,6 +2,7 @@
 
 import { bus } from '../core/events.js';
 import { advanceStage, canAdvanceStage, getNextStage, getStageGoals } from '../systems/stages.js';
+import { getActiveQuest } from '../systems/quests.js';
 import { el } from './dom.js';
 import { lockTime, unlockTime } from './overlay.js';
 import { toast } from './toast.js';
@@ -22,6 +23,15 @@ function progressText(goal) {
 function renderCard() {
   const host = document.querySelector('[data-stage-card]');
   if (!host) return;
+
+  // Пока сюжетная цепочка не пройдена, следующая стадия не показывается.
+  if (getActiveQuest()) {
+    host.hidden = true;
+    host.replaceChildren();
+    return;
+  }
+
+  host.hidden = false;
 
   const next = getNextStage();
 

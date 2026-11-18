@@ -289,9 +289,12 @@ function renderQuest() {
   const view = getActiveQuest();
 
   if (!view) {
+    host.hidden = true;
     host.replaceChildren();
     return;
   }
+
+  host.hidden = false;
 
   const { quest } = view;
   const card = el('section', 'quest-card');
