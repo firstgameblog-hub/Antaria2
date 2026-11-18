@@ -44,9 +44,11 @@ export async function initScene() {
 
   await render(store.state.stage);
   syncPalisade();
+  syncBuildings();
 
   bus.on('state:changed', () => {
     syncPalisade();
+    syncBuildings();
     render(store.state.stage);
   });
 }
@@ -56,6 +58,17 @@ function syncPalisade() {
   const host = document.querySelector('[data-scene]');
   if (!host) return;
 
-  const integrity = store.state.buildings.palisade ?? 0;
+  const integrity = store.state.buildings.palisade?.integrity ?? 0;
   host.dataset.palisade = integrity >= 0.7 ? 'repaired' : 'broken';
+}
+
+/** Уровень дома старосты и построенные объекты меняют карту. */
+function syncBuildings() {
+  const host = document.querySelector('[data-scene]');
+  if (!host) return;
+
+  const state = store.state;
+
+  host.dataset.elderLevel = String(state.buildings.elder_hut?.level ?? 1);
+  host.dataset.watchtower = (state.buildings.watchtower?.level ?? 0) > 0 ? '1' : '0';
 }

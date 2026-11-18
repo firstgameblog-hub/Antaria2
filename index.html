@@ -40,6 +40,7 @@
     <button class="tab is-active" type="button" role="tab" aria-selected="true" data-tab="village">Деревня</button>
     <button class="tab" type="button" role="tab" aria-selected="false" data-tab="inventory">Инвентарь</button>
     <button class="tab" type="button" role="tab" aria-selected="false" data-tab="craft">Крафт</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" data-tab="build">Стройка</button>
     <button class="tab" type="button" role="tab" aria-selected="false" data-tab="trade">Торговля</button>
     <button class="tab" type="button" role="tab" aria-selected="false" data-tab="chronicle">Хроника</button>
     <button class="tab" type="button" role="tab" aria-selected="false" data-tab="saves">Сохранения</button>
@@ -112,6 +113,28 @@
           <h2 class="panel-title">Готовится</h2>
           <ul class="queue" data-craft-queue></ul>
           <p class="muted">Время идёт по игровым минутам. Пропущенное не возвращается.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="build" role="tabpanel">
+      <div class="split">
+        <div>
+          <h2 class="panel-title">Стройка</h2>
+          <p class="muted">Стройка идёт по игровым минутам и занимает рабочего. Ночью работа не останавливается.</p>
+          <div class="build-list" data-buildings></div>
+        </div>
+
+        <aside class="status">
+          <h2 class="panel-title">Деревня</h2>
+          <dl class="stats stats-single" data-village-effects></dl>
+
+          <p class="muted">Рабочие: <span data-build-workers>0 / 2</span></p>
+
+          <h2 class="panel-title">В работе</h2>
+          <ul class="queue" data-build-queue></ul>
+
+          <p class="muted">Один рабочий — одна стройка. Больше жителей — больше одновременных работ.</p>
         </aside>
       </div>
     </section>

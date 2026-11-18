@@ -22,11 +22,13 @@ import { initScene } from './ui/scene.js';
 import { initVillage } from './ui/village.js';
 import { initInventory } from './ui/inventory.js';
 import { initCraft } from './ui/craft.js';
+import { initBuildings } from './ui/buildings.js';
 import { initTrade } from './ui/trade.js';
 import { initBook, openBook } from './ui/book.js';
 import { initDialogue } from './ui/dialogue.js';
 import { toast } from './ui/toast.js';
 import { processCrafting } from './systems/crafting.js';
+import { processConstruction } from './systems/buildings.js';
 import { checkChapterQuest } from './systems/quests.js';
 import { validateData } from '../data/index.js';
 
@@ -202,6 +204,7 @@ function initLoopHooks() {
 
   // Крафт завершается по игровым минутам.
   bus.on('time:minute', processCrafting);
+  bus.on('time:minute', processConstruction);
 
   // Страховка при закрытии вкладки.
   window.addEventListener('beforeunload', () => {
@@ -226,6 +229,7 @@ function boot() {
   initVillage();
   initInventory();
   initCraft();
+  initBuildings();
   initTrade();
   initBook();
   initDialogue();
@@ -233,8 +237,9 @@ function boot() {
   initSaves();
   initLoopHooks();
 
-  // Догоняем крафт, который мог завершиться до загрузки страницы.
+  // Догоняем крафт и стройку, которые могли завершиться до загрузки страницы.
   processCrafting();
+  processConstruction();
   checkChapterQuest();
 
   startLoop();

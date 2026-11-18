@@ -102,7 +102,7 @@ export function initHud() {
     }
     refs.population.textContent = String(state.population);
 
-    const integrity = Number(state.buildings.palisade) || 0;
+    const integrity = Number(state.buildings.palisade?.integrity) || 0;
     refs.palisade.textContent = `${Math.round(integrity * 100)}%`;
 
     renderResources(state);

@@ -25,11 +25,15 @@ export const DATA = {
 
 function listStations() {
   const stations = new Set();
+
   for (const building of Object.values(BUILDINGS)) {
-    for (const station of building.effects?.craftStations ?? []) {
-      stations.add(station);
+    for (const level of building.levels ?? []) {
+      for (const station of level.effects?.craftStations ?? []) {
+        stations.add(station);
+      }
     }
   }
+
   return stations;
 }
 
@@ -56,12 +60,58 @@ export function validateData() {
     }
   }
 
+  const effectKeys = new Set([
+    'housing',
+    'storage',
+    'defense',
+    'comfort',
+    'food',
+    'craftStations',
+  ]);
+
   for (const building of Object.values(BUILDINGS)) {
     if (!STAGES[building.stageFrom]) {
       problems.push(`Постройка "${building.id}": нет стадии ${building.stageFrom}`);
     }
-    for (const id of Object.keys(building.cost)) {
-      if (!RESOURCES[id]) problems.push(`Постройка "${building.id}": нет ресурса "${id}" в цене`);
+
+    const levels = Array.isArray(building.levels) ? building.levels : [];
+
+    if (building.buildable !== false && levels.length === 0) {
+      problems.push(`Постройка "${building.id}": нет уровней`);
+    }
+
+    if (levels.length && building.startLevel > levels.length) {
+      problems.push(`Постройка "${building.id}": стартовый уровень вне диапазона`);
+    }
+
+    if (
+      building.unique === false &&
+      building.buildable !== false &&
+      !Number.isFinite(building.startCount)
+    ) {
+      problems.push(`Постройка "${building.id}": нет стартового количества`);
+    }
+
+    for (const level of levels) {
+      if (!level.name) {
+        problems.push(`Постройка "${building.id}": у уровня нет названия`);
+      }
+
+      if (!Number.isFinite(level.minutes) || level.minutes <= 0) {
+        problems.push(`Постройка "${building.id}": некорректное время стройки`);
+      }
+
+      for (const id of Object.keys(level.cost ?? {})) {
+        if (!RESOURCES[id]) {
+          problems.push(`Постройка "${building.id}": нет ресурса "${id}" в цене`);
+        }
+      }
+
+      for (const key of Object.keys(level.effects ?? {})) {
+        if (!effectKeys.has(key)) {
+          problems.push(`Постройка "${building.id}": неизвестный эффект "${key}"`);
+        }
+      }
     }
   }
 

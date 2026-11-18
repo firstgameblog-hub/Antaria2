@@ -7,21 +7,24 @@ import { checkChapterQuest } from './quests.js';
 export const REPAIR_COST = 4;
 export const REPAIR_STEP = 0.1;
 
+/** Целостность частокола: 0–1. */
+function palisadeIntegrity(state = store.state) {
+  return state.buildings.palisade?.integrity ?? 0;
+}
+
 export function palisadePercent() {
-  return Math.round((store.state.buildings.palisade ?? 0) * 100);
+  return Math.round(palisadeIntegrity() * 100);
 }
 
 export function canRepair() {
   const state = store.state;
-  return (
-    state.buildings.palisade < 1 && (state.resources.branch ?? 0) >= REPAIR_COST
-  );
+  return palisadeIntegrity(state) < 1 && (state.resources.branch ?? 0) >= REPAIR_COST;
 }
 
 export function repairPalisade() {
   const state = store.state;
 
-  if (state.buildings.palisade >= 1) {
+  if (palisadeIntegrity(state) >= 1) {
     bus.emit('ui:toast', 'Частокол и так цел.');
     return false;
   }
@@ -33,7 +36,15 @@ export function repairPalisade() {
 
   store.update((current) => {
     current.resources.branch -= REPAIR_COST;
-    current.buildings.palisade = Math.min(1, current.buildings.palisade + REPAIR_STEP);
+
+    if (!current.buildings.palisade) {
+      current.buildings.palisade = { level: 1, count: 1, integrity: 0 };
+    }
+
+    current.buildings.palisade.integrity = Math.min(
+      1,
+      palisadeIntegrity(current) + REPAIR_STEP,
+    );
   });
 
   bus.emit(

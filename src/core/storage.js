@@ -38,12 +38,12 @@ function hydrate(saved) {
     ...saved,
     time: { ...base.time, ...(saved.time || {}) },
     resources: { ...base.resources, ...(saved.resources || {}) },
-    buildings: { ...base.buildings, ...(saved.buildings || {}) },
     settings: { ...base.settings, ...(saved.settings || {}) },
     meta: { ...base.meta, ...(saved.meta || {}) },
   };
 
   state.version = SAVE_VERSION;
+  state.buildings = normalizeBuildings(saved.buildings);
   state.chronicle = Array.isArray(saved.chronicle) ? saved.chronicle : base.chronicle;
   state.flags = saved.flags && typeof saved.flags === 'object' ? saved.flags : {};
   state.population = Number.isFinite(saved.population) ? saved.population : base.population;
@@ -54,6 +54,7 @@ function hydrate(saved) {
   state.stats = { ...base.stats, ...(saved.stats || {}) };
   state.nodes = { ...base.nodes, ...(saved.nodes || {}) };
   state.crafting = Array.isArray(saved.crafting) ? saved.crafting : [];
+  state.construction = Array.isArray(saved.construction) ? saved.construction : [];
 
   const savedStock = saved.trader && saved.trader.stock ? saved.trader.stock : {};
   state.trader = { stock: { ...base.trader.stock, ...savedStock } };
@@ -62,6 +63,52 @@ function hydrate(saved) {
   state.time.uiPaused = false;
 
   return state;
+}
+
+/**
+ * Привести постройки к единому виду { level, count, integrity? }.
+ * Сейвы версии 2 хранили часть построек числами.
+ */
+function normalizeBuildings(saved) {
+  const base = createInitialState().buildings;
+  const result = {};
+
+  for (const [id, value] of Object.entries(base)) {
+    result[id] = { ...value };
+  }
+
+  if (!saved || typeof saved !== 'object') return result;
+
+  for (const [id, value] of Object.entries(saved)) {
+    if (typeof value === 'number') {
+      if (id === 'palisade') {
+        result[id] = {
+          ...(result[id] || { level: 1, count: 1 }),
+          integrity: Math.min(1, Math.max(0, value)),
+        };
+      } else if (id === 'house' || id === 'field') {
+        result[id] = {
+          ...(result[id] || { level: 1, count: 0 }),
+          level: 1,
+          count: Math.max(0, Math.floor(value)),
+        };
+      } else {
+        const level = value > 0 ? value : 0;
+        result[id] = {
+          ...(result[id] || { level: 0, count: 0 }),
+          level,
+          count: level > 0 ? 1 : 0,
+        };
+      }
+      continue;
+    }
+
+    if (value && typeof value === 'object') {
+      result[id] = { ...(result[id] || { level: 0, count: 0 }), ...value };
+    }
+  }
+
+  return result;
 }
 
 /** Прочитать сохранение без применения. */

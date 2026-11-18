@@ -945,6 +945,50 @@ body.is-modal {
   gap: 12px;
 }
 
+.build-list {
+  display: grid;
+  gap: 12px;
+}
+
+.build-card.is-locked {
+  opacity: 0.55;
+}
+
+.build-effects {
+  margin: 6px 0 0;
+  font-size: 13.5px;
+  color: var(--ink-dim);
+}
+
+.build-next {
+  margin: 6px 0 0;
+  font-size: 13.5px;
+  color: #d6cbb6;
+}
+
+.build-card .ingredients {
+  margin-top: 12px;
+}
+
+.elder-hut-l2,
+.elder-hut-l3,
+.watchtower {
+  display: none;
+}
+
+[data-elder-level="2"] .elder-hut-l2,
+[data-elder-level="3"] .elder-hut-l2 {
+  display: block;
+}
+
+[data-elder-level="3"] .elder-hut-l3 {
+  display: block;
+}
+
+[data-watchtower="1"] .watchtower {
+  display: block;
+}
+
 .recipe-card {
   padding: 16px 18px;
   background: var(--panel);
@@ -1421,7 +1465,7 @@ body.is-modal {
 }
 
 .sleep-overlay.is-active .sleep-progress span {
-  animation: sleep-fill 6.2s linear forwards;
+  animation: sleep-fill 8.2s linear forwards;
 }
 
 @keyframes sleep-fill {

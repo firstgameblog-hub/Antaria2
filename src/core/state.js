@@ -9,8 +9,9 @@
 import { bus } from './events.js';
 import { LOCATIONS } from '../../data/locations.js';
 import { TRADER } from '../../data/traders.js';
+import { BUILDINGS } from '../../data/buildings.js';
 
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 
 const START_HOUR = 8;
 
@@ -25,6 +26,24 @@ function createNodes() {
   }
 
   return nodes;
+}
+
+/** Постройки: уровень, количество, целостность (у частокола). */
+function createBuildings() {
+  const buildings = {};
+
+  for (const def of Object.values(BUILDINGS)) {
+    buildings[def.id] = {
+      level: def.startLevel ?? 0,
+      count: def.unique ? (def.startLevel > 0 ? 1 : 0) : (def.startCount ?? 0),
+    };
+
+    if (def.startIntegrity !== undefined) {
+      buildings[def.id].integrity = def.startIntegrity;
+    }
+  }
+
+  return buildings;
 }
 
 /** @returns {object} состояние новой игры */
@@ -64,16 +83,11 @@ export function createInitialState() {
       dried_berries: 0,
     },
 
-    buildings: {
-      elder_hut: 1,
-      house: 8,
-      palisade: 0.6,
-      campfire: 1,
-      field: 2,
-    },
+    buildings: createBuildings(),
 
     nodes: createNodes(),
     crafting: [],
+    construction: [],
 
     trader: {
       stock: { ...TRADER.stock },

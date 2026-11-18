@@ -11,7 +11,9 @@ const QUEST_ID = 'chapter1_first_steps';
 
 export function isStepDone(step, state) {
   if (step.flag) return Boolean(state.flags[step.flag]);
-  if (step.counter === 'palisade') return state.buildings.palisade >= step.target;
+  if (step.counter === 'palisade') {
+    return (state.buildings.palisade?.integrity ?? 0) >= step.target;
+  }
   if (step.counter === 'herb') return state.stats.herbGathered >= step.target;
   return false;
 }
@@ -25,7 +27,8 @@ export function getQuestView() {
     let progress = null;
 
     if (step.counter === 'palisade') {
-      progress = `${Math.round(state.buildings.palisade * 100)}% из ${Math.round(step.target * 100)}%`;
+      const integrity = state.buildings.palisade?.integrity ?? 0;
+      progress = `${Math.round(integrity * 100)}% из ${Math.round(step.target * 100)}%`;
     } else if (step.counter === 'herb') {
       progress = `${Math.min(state.stats.herbGathered, step.target)} из ${step.target}`;
     }
