@@ -14,7 +14,7 @@ export const LOCATIONS = {
     description:
       'Утоптанная земля, поленница у стены, колодец с воротом. Отсюда видно всю деревню — ' +
       'и то, как мало от неё осталось.',
-    actions: ['read_chapter', 'sleep'],
+    actions: ['talk_elder', 'sleep'],
   },
 
   edge: {

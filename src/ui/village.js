@@ -10,7 +10,7 @@ import {
   gather,
   getActiveGather,
 } from '../systems/gathering.js';
-import { getQuestView } from '../systems/quests.js';
+import { getActiveQuest } from '../systems/quests.js';
 import {
   REPAIR_COST,
   REPAIR_SECONDS,
@@ -21,8 +21,7 @@ import {
   palisadePercent,
   startRepair,
 } from '../systems/village.js';
-import { openBook } from './book.js';
-import { openHerbalist } from './dialogue.js';
+import { openAskold, openElder, openHerbalist } from './dialogue.js';
 import { el } from './dom.js';
 import { openTab } from './panels.js';
 import { startSleep } from './sleep.js';
@@ -30,10 +29,9 @@ import { startSleep } from './sleep.js';
 let selected = 'yard';
 
 const ACTIONS = {
-  read_chapter: {
-    label: () =>
-      store.state.flags.chapter1_intro_done ? 'Перечитать главу I' : 'Читать главу I',
-    run: () => openBook(),
+  talk_elder: {
+    label: 'Поговорить со старостой · Радим',
+    run: () => openElder(),
   },
 
   repair_palisade: {
@@ -58,7 +56,7 @@ const ACTIONS = {
 
   open_trade: {
     label: 'Поговорить с Аскольдом',
-    run: () => openTab('trade'),
+    run: () => openAskold(),
   },
 
   sleep: {
@@ -95,10 +93,7 @@ function renderPins() {
     button.append(el('span', 'pin-dot'));
     button.append(el('span', 'pin-label', location.name));
 
-    button.addEventListener('click', () => {
-      selected = location.id;
-      render();
-    });
+    button.addEventListener('click', () => selectLocation(location.id));
 
     return button;
   });
@@ -107,6 +102,22 @@ function renderPins() {
 
   const caption = document.querySelector('[data-location-caption]');
   if (caption) caption.textContent = LOCATIONS[selected]?.name ?? '';
+}
+
+function selectLocation(id) {
+  selected = id;
+
+  if (
+    id === 'yard' &&
+    store.state.flags.chapter1_first_steps_done &&
+    !store.state.flags.visited_yard_report
+  ) {
+    store.update((state) => {
+      state.flags.visited_yard_report = true;
+    });
+  }
+
+  render();
 }
 
 function renderNode(node) {
@@ -275,24 +286,21 @@ function renderLocationPanel() {
 
 function renderQuest() {
   const host = document.querySelector('[data-quest]');
-  const view = getQuestView();
+  const view = getActiveQuest();
 
-  const card = el('section', `quest-card${view.done ? ' is-done' : ''}`);
+  if (!view) {
+    host.replaceChildren();
+    return;
+  }
+
+  const { quest } = view;
+  const card = el('section', 'quest-card');
 
   const head = el('div', 'quest-head');
-  head.append(el('h2', 'panel-title', 'Письмо отца'));
-  if (view.done) head.append(el('span', 'quest-badge', 'выполнено'));
-
+  head.append(el('h2', 'panel-title', quest.title));
   card.append(head);
-  card.append(
-    el(
-      'p',
-      'quest-intro',
-      view.done
-        ? 'Поручение закрыто. Деревня сделала первый шаг.'
-        : 'Три дела на сегодня. Не как работа — как долг.',
-    ),
-  );
+
+  card.append(el('p', 'quest-intro', quest.short ?? ''));
 
   const list = el('ol', 'quest-steps');
 
@@ -306,9 +314,11 @@ function renderQuest() {
 
   card.append(list);
 
-  if (!view.done) {
+  if (quest.hint) card.append(el('p', 'quest-hint', quest.hint));
+
+  if (quest.rewards?.coin) {
     card.append(
-      el('p', 'quest-reward', `Награда: ${view.quest.rewards.coin} серебра и запись в хронике.`),
+      el('p', 'quest-reward', `Награда: ${quest.rewards.coin} серебра.`),
     );
   }
 
@@ -334,6 +344,7 @@ export function initVillage() {
   bus.on('state:loaded', () => {
     cancelGather();
     cancelRepair();
+    selected = 'yard';
   });
 
   render();
