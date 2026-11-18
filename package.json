@@ -1,0 +1,11 @@
+{
+  "name": "antaria-chronicles",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Хроники Антарии — браузерная сюжетная RPG",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "check": "node tools/check.mjs"
+  }
+}

@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Умирающая деревня на рассвете">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#23211c"/>
+      <stop offset="0.55" stop-color="#453c2f"/>
+      <stop offset="1" stop-color="#6b5a44"/>
+    </linearGradient>
+
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#443f2e"/>
+      <stop offset="1" stop-color="#232116"/>
+    </linearGradient>
+
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffb457" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#ffb457" stop-opacity="0"/>
+    </radialGradient>
+
+    <pattern id="furrow" width="12" height="8" patternUnits="userSpaceOnUse">
+      <rect width="12" height="8" fill="#373426"/>
+      <path d="M0 6.5H12" stroke="#232115" stroke-width="2"/>
+    </pattern>
+
+    <pattern id="palisade" width="14" height="56" patternUnits="userSpaceOnUse">
+      <path d="M1 56V7L7 0L13 7V56Z" fill="#2e2718" stroke="#191510" stroke-width="1"/>
+    </pattern>
+
+    <g id="hut">
+      <rect x="0" y="0" width="64" height="58" fill="#3a2f21" stroke="#1d1811" stroke-width="2"/>
+      <path d="M-8 0L32 -28L72 0Z" fill="#4b3a26" stroke="#1d1811" stroke-width="2" stroke-linejoin="round"/>
+      <rect x="25" y="30" width="15" height="28" fill="#171310"/>
+      <rect x="9" y="15" width="11" height="11" fill="#8a7440" opacity="0.22"/>
+      <path d="M0 47H64" stroke="#241d15" stroke-width="2" opacity="0.55"/>
+    </g>
+  </defs>
+
+  <!-- небо -->
+  <rect x="0" y="0" width="800" height="272" fill="url(#sky)"/>
+
+  <!-- солнце -->
+  <circle cx="632" cy="104" r="46" fill="#c9b483" opacity="0.12"/>
+  <circle cx="632" cy="104" r="24" fill="#d8c79b" opacity="0.28"/>
+
+  <!-- дальний лес -->
+  <path d="M0 268L0 246L28 258L56 238L84 254L112 242L140 256L168 234L196 252L224 240L252 258L280 244L308 254L336 236L364 252L392 242L420 258L448 238L476 254L504 244L532 256L560 234L588 252L616 242L644 258L672 236L700 254L728 244L756 258L784 240L800 250L800 268Z" fill="#292720"/>
+
+  <!-- земля -->
+  <rect x="0" y="268" width="800" height="182" fill="url(#ground)"/>
+  <path d="M0 268c110-10 210 8 330 2s210-10 320 0 110 6 150 2v178H0Z" fill="#363326" opacity="0.55"/>
+
+  <!-- частокол: три ряда с проломами -->
+  <g>
+    <rect x="14" y="292" width="332" height="56" fill="url(#palisade)"/>
+    <rect x="386" y="292" width="148" height="56" fill="url(#palisade)"/>
+    <rect x="588" y="292" width="198" height="56" fill="url(#palisade)"/>
+    <rect x="330" y="334" width="78" height="9" rx="4" fill="#2a2318" stroke="#191510" stroke-width="1" transform="rotate(-8 330 334)"/>
+    <rect x="524" y="340" width="66" height="8" rx="4" fill="#2a2318" stroke="#191510" stroke-width="1" transform="rotate(6 524 340)"/>
+  </g>
+
+  <!-- дома -->
+  <use href="#hut" transform="translate(56,320)"/>
+  <use href="#hut" transform="translate(152,332) scale(0.84)"/>
+  <use href="#hut" transform="translate(472,306)"/>
+  <use href="#hut" transform="translate(616,318) scale(0.9)"/>
+
+  <!-- лачуга старосты -->
+  <g transform="translate(334,286)">
+    <rect x="0" y="0" width="88" height="74" fill="#3f3324" stroke="#1d1811" stroke-width="2"/>
+    <path d="M-10 0L44 -38L98 0Z" fill="#503e28" stroke="#1d1811" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="34" y="38" width="20" height="36" fill="#171310"/>
+    <rect x="13" y="18" width="15" height="13" fill="#8a7440" opacity="0.24"/>
+    <rect x="64" y="-42" width="10" height="30" fill="#2c241a" stroke="#1a1510" stroke-width="1"/>
+    <circle class="svg-smoke" cx="69" cy="-48" r="6" fill="#8a8474" opacity="0.18"/>
+    <circle class="svg-smoke svg-smoke-2" cx="72" cy="-52" r="8" fill="#8a8474" opacity="0.12"/>
+  </g>
+
+  <!-- поля -->
+  <g>
+    <rect x="26" y="388" width="180" height="50" fill="url(#furrow)" rx="2"/>
+    <rect x="26" y="388" width="180" height="50" fill="none" stroke="#1f1c13" stroke-width="2" rx="2"/>
+    <rect x="600" y="392" width="170" height="46" fill="url(#furrow)" rx="2" opacity="0.85"/>
+  </g>
+
+  <!-- тропа -->
+  <path d="M400 450c-6-18 4-30 0-42" stroke="#4a4331" stroke-width="26" fill="none" opacity="0.28" stroke-linecap="round"/>
+
+  <!-- костёр -->
+  <g transform="translate(400,404)">
+    <ellipse cx="0" cy="16" rx="48" ry="12" fill="#1a1610" opacity="0.75"/>
+    <circle cx="0" cy="6" r="56" fill="url(#glow)"/>
+    <g fill="#4b4638" stroke="#221f19" stroke-width="1.5">
+      <ellipse cx="-30" cy="15" rx="8" ry="5"/>
+      <ellipse cx="-16" cy="20" rx="7" ry="4"/>
+      <ellipse cx="16" cy="20" rx="7" ry="4"/>
+      <ellipse cx="31" cy="14" rx="8" ry="5"/>
+      <ellipse cx="0" cy="22" rx="8" ry="4"/>
+    </g>
+    <path d="M-18 18L12 6M-12 6L18 18" stroke="#2a2115" stroke-width="5" stroke-linecap="round"/>
+    <path class="svg-flame" d="M0 14C-11 5-7-4 0-15C7-4 11 5 0 14Z" fill="#d98a3d"/>
+    <path d="M0 12C-5 7-3 2 0-5C3 2 5 7 0 12Z" fill="#f2c26b"/>
+    <circle class="svg-smoke" cx="0" cy="-28" r="7" fill="#9a927f" opacity="0.18"/>
+    <circle class="svg-smoke svg-smoke-2" cx="4" cy="-44" r="10" fill="#9a927f" opacity="0.12"/>
+  </g>
+
+  <!-- трава -->
+  <g stroke="#4d5136" stroke-width="2" fill="none" opacity="0.5">
+    <path d="M120 430c2-8 2-12 4-16M128 430c0-7-2-11-4-15"/>
+    <path d="M540 438c2-8 3-12 6-16M548 438c-1-6-3-10-6-14"/>
+    <path d="M700 428c2-7 2-11 5-15M708 428c0-6-2-9-4-13"/>
+    <path d="M232 442c2-7 3-10 6-14M240 442c-1-5-3-9-6-12"/>
+  </g>
+</svg>

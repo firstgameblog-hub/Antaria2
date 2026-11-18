@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Хроники Антарии</title>
+  <link rel="icon" href="svg/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="app-header">
+    <div class="brand">
+      <p class="brand-kicker">Глава <span data-hud="chapter-number">I</span> · <span data-hud="chapter-name">Пробуждение</span></p>
+      <h1 class="brand-title">Хроники Антарии</h1>
+    </div>
+
+    <div class="clock-block" aria-live="polite">
+      <span class="clock-time" data-hud="clock">08:00</span>
+      <span class="clock-day" data-hud="day">День 1</span>
+    </div>
+
+    <div class="header-tools">
+      <button class="tool" id="btn-sound" type="button" aria-pressed="false">Звук: выкл</button>
+      <button class="tool" id="btn-pause" type="button">Пауза</button>
+      <label class="speed">
+        <span>Скорость</span>
+        <select id="select-speed">
+          <option value="1">×1</option>
+          <option value="2">×2</option>
+          <option value="4">×4</option>
+        </select>
+      </label>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Разделы">
+    <button class="tab is-active" type="button" role="tab" aria-selected="true" data-tab="village">Деревня</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" data-tab="inventory">Инвентарь</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" data-tab="craft">Крафт</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" data-tab="trade">Торговля</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" data-tab="chronicle">Хроника</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" data-tab="saves">Сохранения</button>
+  </nav>
+
+  <main class="app-main">
+    <section class="panel is-active" data-panel="village" role="tabpanel">
+      <div class="village-layout">
+        <div class="scene-wrap">
+          <div class="map-wrap">
+            <div class="scene" data-scene aria-label="Карта деревни"></div>
+            <div class="map-pins" data-map-pins role="group" aria-label="Точки на карте"></div>
+          </div>
+
+          <p class="scene-caption">
+            Стадия <span data-hud="stage-number">1</span>
+            · <span data-hud="stage-name">Умирающая деревня</span>
+            · <span data-location-caption>Двор старосты</span>
+          </p>
+
+          <div class="location-panel" data-location-panel></div>
+        </div>
+
+        <aside class="status">
+          <h2 class="panel-title">Состояние</h2>
+          <dl class="stats">
+            <div class="stat">
+              <dt>Население</dt>
+              <dd data-hud="population">20</dd>
+            </div>
+            <div class="stat">
+              <dt>Частокол</dt>
+              <dd data-hud="palisade">60%</dd>
+            </div>
+          </dl>
+
+          <h2 class="panel-title">Припасы</h2>
+          <ul class="resources" data-hud="resources"></ul>
+
+          <section class="quest-card" data-quest></section>
+        </aside>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="inventory" role="tabpanel">
+      <div class="split">
+        <div>
+          <h2 class="panel-title">Сумка Зара</h2>
+          <p class="muted">Каждый предмет — одна ячейка. Стопки растут без ограничений — ограничения появятся со складом.</p>
+          <div class="inventory-grid" data-inventory></div>
+        </div>
+
+        <aside class="status">
+          <h2 class="panel-title">Зар</h2>
+          <dl class="stats stats-single" data-player-stats></dl>
+          <p class="muted">Характеристики — черновик этапа 2. Торговое чутьё уже влияет на цены у Аскольда.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="craft" role="tabpanel">
+      <div class="split">
+        <div>
+          <h2 class="panel-title">Костёр</h2>
+          <p class="muted">Рецепт занимает игровое время. Пока варится — можно уйти по делам: очередь не остановится.</p>
+          <div class="recipe-list" data-recipes></div>
+        </div>
+
+        <aside class="status">
+          <h2 class="panel-title">Готовится</h2>
+          <ul class="queue" data-craft-queue></ul>
+          <p class="muted">Время идёт по игровым минутам. Пропущенное не возвращается.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="trade" role="tabpanel">
+      <div class="split">
+        <div>
+          <h2 class="panel-title">Аскольд, торговец-странник</h2>
+          <p class="muted" data-trader-intro></p>
+
+          <h3 class="sub-title">Купить</h3>
+          <ul class="trade-list" data-trade-buy></ul>
+
+          <h3 class="sub-title">Продать</h3>
+          <ul class="trade-list" data-trade-sell></ul>
+        </div>
+
+        <aside class="status">
+          <h2 class="panel-title">Кошаль</h2>
+          <p class="coin-line"><span data-trade-coin>15</span> серебра</p>
+          <p class="muted">Торговое чутьё: <span data-trade-skill>3</span>. Чем выше — тем выгоднее сделки.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="chronicle" role="tabpanel">
+      <div class="chronicle">
+        <h2 class="panel-title">Хроника Антарии</h2>
+        <p class="muted">Летопись деревни. Записи добавляются сами — игрок может перечитать пройденное.</p>
+        <ol class="chronicle-list" data-chronicle></ol>
+      </div>
+    </section>
+
+    <section class="panel" data-panel="saves" role="tabpanel">
+      <div class="saves">
+        <h2 class="panel-title">Сохранения</h2>
+        <ul class="save-list" data-save-list></ul>
+
+        <div class="button-row">
+          <button class="btn" type="button" id="save-manual">Сохранить сейчас</button>
+          <button class="btn" type="button" id="load-manual">Загрузить</button>
+          <button class="btn" type="button" id="delete-manual">Удалить</button>
+        </div>
+
+        <h2 class="panel-title">Файл</h2>
+        <p class="muted">Экспорт позволяет перенести сохранение на другое устройство.</p>
+        <div class="button-row">
+          <button class="btn" type="button" id="export-save">Экспорт</button>
+          <button class="btn" type="button" id="import-save">Импорт</button>
+          <input type="file" id="import-input" accept="application/json,.json" hidden>
+        </div>
+
+        <p class="muted">Автосохранение срабатывает на смене игрового дня.</p>
+
+        <h2 class="panel-title">Опасная зона</h2>
+        <div class="button-row">
+          <button class="btn btn-danger" type="button" id="reset-game">Начать заново</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    Карта деревни · этап 3 · глава I и первая петля
+  </footer>
+
+  <div class="overlay" data-overlay="book" hidden>
+    <article class="book" role="dialog" aria-modal="true" aria-label="Глава первая">
+      <header class="book-head">
+        <span class="book-kicker" data-book-kicker>Глава I</span>
+        <button class="book-close" type="button" data-book-close aria-label="Закрыть книгу">×</button>
+      </header>
+      <div class="book-body" data-book-body></div>
+      <footer class="book-foot">
+        <span class="book-progress" data-book-progress></span>
+        <div class="button-row">
+          <button class="btn btn-ghost" type="button" data-book-prev>Назад</button>
+          <button class="btn" type="button" data-book-next>Далее</button>
+        </div>
+      </footer>
+    </article>
+  </div>
+
+  <div class="overlay" data-overlay="dialogue" hidden>
+    <article class="dialogue" role="dialog" aria-modal="true" aria-label="Разговор">
+      <header class="dialogue-head">
+        <span class="speaker" data-dialogue-speaker>Мирна</span>
+        <span class="speaker-role" data-dialogue-role>травница</span>
+      </header>
+      <div class="dialogue-body" data-dialogue-body></div>
+      <footer class="dialogue-foot" data-dialogue-foot></footer>
+    </article>
+  </div>
+
+  <div class="sleep-overlay" data-overlay="sleep" hidden>
+    <div class="sleep-card" role="status" aria-live="polite">
+      <div class="sleep-orb" aria-hidden="true"></div>
+      <p class="sleep-kicker" data-sleep-kicker>Ночь</p>
+      <p class="sleep-title" data-sleep-title>День 1 уходит</p>
+      <p class="sleep-text" data-sleep-text>Деревня засыпает. Слышно, как ветер ходит по крышам.</p>
+      <div class="sleep-progress" aria-hidden="true"><span></span></div>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <noscript>
+    <p class="noscript">Для игры нужен JavaScript.</p>
+  </noscript>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
