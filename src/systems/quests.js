@@ -12,6 +12,13 @@ const FIRST_QUEST_ID = 'chapter1_first_steps';
 export function isStepDone(step, state) {
   if (step.flag) return Boolean(state.flags[step.flag]);
 
+  if (step.building) {
+    return (
+      (state.buildings[step.building]?.[step.field ?? 'level'] ?? 0) >=
+      (step.target ?? 1)
+    );
+  }
+
   if (step.counter === 'palisade') {
     return (state.buildings.palisade?.integrity ?? 0) >= step.target;
   }
@@ -29,6 +36,9 @@ export function getQuestView(quest) {
     if (step.counter === 'palisade') {
       const integrity = state.buildings.palisade?.integrity ?? 0;
       progress = `${Math.round(integrity * 100)}% из ${Math.round(step.target * 100)}%`;
+    } else if (step.building) {
+      const value = state.buildings[step.building]?.[step.field ?? 'level'] ?? 0;
+      progress = `${value} из ${step.target ?? 1}`;
     } else if (step.counter) {
       const have = state.resources[step.counter] ?? 0;
       progress = `${Math.min(have, step.target)} из ${step.target}`;
@@ -51,7 +61,33 @@ export function getQuestViewById(id) {
 
 /** Какой квест сейчас показывать в деревне. */
 export function getActiveQuest() {
-  const flags = store.state.flags;
+  const state = store.state;
+  const flags = state.flags;
+
+  if (state.stage === 2) {
+    if ((state.buildings.smithy?.level ?? 0) < 1) {
+      return getQuestViewById('chapter2_smithy');
+    }
+
+    if (
+      (state.resources.knife ?? 0) < 1 ||
+      (state.resources.axe ?? 0) < 1
+    ) {
+      return getQuestViewById('chapter2_tools');
+    }
+
+    if ((state.resources.meat ?? 0) < 3 || (state.resources.hide ?? 0) < 1) {
+      return getQuestViewById('chapter2_hunt');
+    }
+
+    if (!flags.chapter2_reported) {
+      return getQuestViewById('chapter2_report');
+    }
+
+    return null;
+  }
+
+  if (state.stage !== 1) return null;
 
   if (!flags[`${FIRST_QUEST_ID}_done`]) {
     return getQuestViewById(FIRST_QUEST_ID);

@@ -19,7 +19,7 @@
 {
   id: 'herb',
   name: 'Травы',
-  kind: 'plant',          // plant | wood | mineral | product | material | currency
+  kind: 'plant',          // plant | wood | mineral | product | material | food | tool | currency
   stages: [1],            // с каких стадий доступен
   price: 2,               // базовая цена в серебре
   lore: 'Короткий абзац «из книги».'
@@ -88,6 +88,8 @@
 
 - Все `ingredients` и `output` существуют в `RESOURCES`.
 - `station` обязан существовать хотя бы у одной постройки.
+- Рецепт виден, если подходит стадия и в деревне есть действующая станция
+  (например, рецепты кузницы открываются после её постройки).
 - Один рецепт даёт один результат (несколько — через отдельные записи).
 
 ## 4. Квест (`data/quests.js`)
@@ -104,7 +106,7 @@
   intro: 'Текст письма или разговора.',
   steps: [
     { id: 'gather_herbs', text: 'Собрать травы', counter: 'herb', target: 10 },
-    { id: 'repair_palisade', text: 'Починить частокол', counter: 'palisade', target: 0.7 },
+    { id: 'build_smithy', text: 'Построить кузницу', building: 'smithy', field: 'level', target: 1 },
     { id: 'talk_herbalist', text: 'Поговорить с травницей', flag: 'met_herbalist' }
   ],
   rewards: { coin: 10, flag: 'chapter1_steps_started' }
@@ -113,9 +115,8 @@
 
 Правила:
 
-- У шага есть либо `counter + target`, либо `flag`.
-- `counter` — id ресурса или служебный `palisade`; `palisade` измеряется
-  долей от 0 до 1.
+- У шага есть либо `counter + target` (ресурс или `palisade`),
+  либо `flag`, либо `building + field + target` (уровень постройки).
 - Квест закрывается, когда выполнены все шаги; награда выдаётся один раз
   (флаг `<quest.id>_done`).
 
@@ -287,7 +288,7 @@ state.nodes = {
     "population": 20,
     "time": { "day": 1, "minutes": 480, "speed": 1, "paused": false, "uiPaused": false },
     "player": { "name": "Зар", "strength": 2, "agility": 2, "trade": 3, "trust": 0 },
-    "stats": { "herbGathered": 0, "berryGathered": 0, "coinsEarned": 0 },
+    "stats": { "herbGathered": 0, "berryGathered": 0, "branchGathered": 0, "stoneGathered": 0, "coinsEarned": 0 },
     "resources": { "herb": 0, "berry": 0, "branch": 2, "coin": 15 },
     "buildings": {
       "elder_hut": { "level": 1, "count": 1 },

@@ -1,0 +1,249 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Карта растущего поселения: рынок, дома, кузница и частокол">
+  <defs>
+    <linearGradient id="mapGround" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#25241b"/>
+      <stop offset="1" stop-color="#353122"/>
+    </linearGradient>
+
+    <radialGradient id="mapGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffb457" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#ffb457" stop-opacity="0"/>
+    </radialGradient>
+
+    <pattern id="mapFurrow" width="12" height="8" patternUnits="userSpaceOnUse">
+      <rect width="12" height="8" fill="#3c402b"/>
+      <path d="M0 6.5H12" stroke="#232116" stroke-width="2"/>
+    </pattern>
+
+    <g id="mapHouse">
+      <ellipse cx="26" cy="42" rx="30" ry="8" fill="#1b1812" opacity="0.4"/>
+      <rect width="52" height="38" fill="#4f3f2b" stroke="#1d1811" stroke-width="2"/>
+      <rect x="4" y="4" width="44" height="30" fill="#755a36" stroke="#241d14" stroke-width="1.5"/>
+      <path d="M4 19H48" stroke="#2c2418" stroke-width="1.5" opacity="0.6"/>
+      <rect x="33" y="26" width="9" height="12" fill="#171310"/>
+    </g>
+  </defs>
+
+  <!-- земля -->
+  <rect width="800" height="500" fill="url(#mapGround)"/>
+
+  <!-- лес сверху и слева -->
+  <path d="M0 0H800V92C740 104 690 94 640 102C590 110 540 96 490 104C440 112 390 98 340 106C290 114 240 100 190 108C140 116 90 102 40 110C26 112 12 110 0 112Z" fill="#232b1d"/>
+  <path d="M0 112H64C58 150 74 180 62 214C54 240 24 252 0 250Z" fill="#232b1d"/>
+
+  <!-- поляна деревни -->
+  <rect x="78" y="108" width="544" height="306" rx="18" fill="#2f2c1f"/>
+
+  <!-- луг -->
+  <path d="M622 108C700 98 760 112 800 104V392C760 402 700 388 640 398C628 400 618 394 616 384V118Z" fill="#3a4027"/>
+
+  <!-- ручей -->
+  <path d="M520 500C560 468 590 476 618 452C646 428 690 436 720 412C750 388 780 392 800 378" stroke="#33454a" stroke-width="34" fill="none" stroke-linecap="round"/>
+  <path d="M520 500C560 468 590 476 618 452C646 428 690 436 720 412C750 388 780 392 800 378" stroke="#46606a" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.35"/>
+
+  <!-- дорога -->
+  <path d="M360 500V408Q352 382 316 356" stroke="#4a4130" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <path d="M360 500V410Q352 384 318 358" stroke="#5a5038" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.35" stroke-dasharray="6 10"/>
+
+  <!-- тропинки внутри деревни -->
+  <g stroke="#46402e" stroke-width="13" fill="none" opacity="0.55" stroke-linecap="round">
+    <path d="M240 250C248 282 268 312 300 340"/>
+    <path d="M300 340C350 330 420 316 470 300"/>
+    <path d="M240 250C212 268 182 286 158 306"/>
+    <path d="M470 300C500 292 516 288 528 284"/>
+  </g>
+
+  <!-- поля -->
+  <g>
+    <rect x="104" y="330" width="126" height="58" rx="2" fill="url(#mapFurrow)" stroke="#241f16" stroke-width="2"/>
+    <rect x="452" y="348" width="118" height="46" rx="2" fill="url(#mapFurrow)" stroke="#241f16" stroke-width="2"/>
+  </g>
+
+  <!-- частокол -->
+  <g stroke="#57462c" stroke-width="10" stroke-linecap="round" stroke-dasharray="5 5">
+    <path d="M96 124H604"/>
+    <path d="M96 124V396"/>
+    <path d="M604 124V396"/>
+    <path d="M96 396H604"/>
+  </g>
+  <g stroke="#2a2318" stroke-width="2" opacity="0.55">
+    <path d="M96 124H604"/>
+    <path d="M96 124V396"/>
+    <path d="M604 124V396"/>
+    <path d="M96 396H604"/>
+  </g>
+
+  <!-- ворота -->
+  <rect x="320" y="382" width="12" height="28" fill="#3a2f20" stroke="#1f1a12" stroke-width="1.5"/>
+  <rect x="388" y="382" width="12" height="28" fill="#3a2f20" stroke="#1f1a12" stroke-width="1.5"/>
+
+  <!-- состояние пролома: до и после ремонта -->
+  <g class="palisade-broken">
+    <rect x="326" y="392" width="70" height="9" rx="4" fill="#4a3d28" stroke="#241f16" transform="rotate(-7 326 392)"/>
+    <rect x="330" y="404" width="56" height="8" rx="4" fill="#3f3322" stroke="#241f16" transform="rotate(6 330 404)"/>
+  </g>
+  <g class="palisade-repaired">
+    <path d="M326 396H394" stroke="#57462c" stroke-width="10" stroke-dasharray="5 5" stroke-linecap="round"/>
+  </g>
+
+  <!-- колодец -->
+  <g transform="translate(176,250)">
+    <ellipse cx="0" cy="12" rx="16" ry="6" fill="#1b1812" opacity="0.4"/>
+    <circle r="13" fill="#2f2a20" stroke="#1b1710" stroke-width="2"/>
+    <circle r="8" fill="#1d1a13"/>
+    <path d="M-13 0H13" stroke="#4a3d28" stroke-width="2"/>
+  </g>
+
+  <!-- дома -->
+  <use href="#mapHouse" transform="translate(124,280)"/>
+  <use href="#mapHouse" transform="translate(306,272)"/>
+  <use href="#mapHouse" transform="translate(446,198)"/>
+
+  <!-- лачуга старосты -->
+  <g transform="translate(198,183)">
+    <ellipse cx="42" cy="70" rx="48" ry="11" fill="#1b1812" opacity="0.4"/>
+    <rect width="84" height="64" rx="2" fill="#55432e" stroke="#1d1811" stroke-width="2"/>
+    <rect x="6" y="6" width="72" height="52" fill="#7a5f39" stroke="#241d14" stroke-width="1.5"/>
+    <path d="M6 32H78" stroke="#2c2418" stroke-width="2" opacity="0.7"/>
+    <rect x="44" y="44" width="14" height="14" fill="#171310"/>
+    <rect x="62" y="-8" width="9" height="14" fill="#2c241a" stroke="#1a1510"/>
+    <circle class="svg-smoke" cx="66" cy="-12" r="5" fill="#8a8474" opacity="0.16"/>
+  </g>
+
+  <!-- пристройки дома старосты по уровням -->
+  <g class="elder-hut-l2">
+    <rect x="282" y="202" width="30" height="36" fill="#55432e" stroke="#241d14" stroke-width="1.5"/>
+    <path d="M278 204L297 190L316 204Z" fill="#7a5f39" stroke="#241d14" stroke-width="1.5" stroke-linejoin="round"/>
+    <rect x="292" y="218" width="9" height="20" fill="#171310"/>
+  </g>
+  <g class="elder-hut-l3">
+    <rect x="226" y="148" width="20" height="26" fill="#55432e" stroke="#241d14" stroke-width="1.5"/>
+    <path d="M222 150L236 138L250 150Z" fill="#7a5f39" stroke="#241d14" stroke-width="1.5" stroke-linejoin="round"/>
+  </g>
+
+  <!-- дом травницы -->
+  <g transform="translate(498,256)">
+    <ellipse cx="30" cy="48" rx="34" ry="9" fill="#1b1812" opacity="0.4"/>
+    <rect width="60" height="44" fill="#463a28" stroke="#1d1811" stroke-width="2"/>
+    <rect x="5" y="5" width="50" height="34" fill="#526040" stroke="#22281a" stroke-width="1.5"/>
+    <path d="M5 22H55" stroke="#2a3020" stroke-width="1.5" opacity="0.7"/>
+    <circle cx="16" cy="12" r="2.5" fill="#7c8a52"/>
+    <circle cx="24" cy="16" r="2" fill="#7c8a52"/>
+    <circle cx="42" cy="12" r="2.5" fill="#7c8a52"/>
+    <rect x="38" y="32" width="9" height="12" fill="#171310"/>
+  </g>
+
+  <!-- костёр -->
+  <g transform="translate(300,345)">
+    <circle r="30" fill="url(#mapGlow)"/>
+    <circle r="16" fill="#221d15" stroke="#4b4638" stroke-width="2"/>
+    <circle r="11" fill="#171310"/>
+    <path d="M-8 6L8 -4M-8 -4L8 6" stroke="#2a2115" stroke-width="4" stroke-linecap="round"/>
+    <path class="svg-flame" d="M0 2C-5 -2 -3 -8 0 -13C3 -8 5 -2 0 2Z" fill="#e0a04a"/>
+  </g>
+
+  <!-- новые постройки второй стадии -->
+  <g class="stage2-barn" transform="translate(108,146)">
+    <ellipse cx="26" cy="38" rx="30" ry="8" fill="#1b1812" opacity="0.4"/>
+    <rect width="52" height="36" fill="#4f3f2b" stroke="#241d14" stroke-width="2"/>
+    <path d="M-6 2L26 -18L58 2Z" fill="#755a36" stroke="#241d14" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="20" y="18" width="12" height="18" fill="#171310"/>
+  </g>
+  <g class="stage2-smithy" transform="translate(486,148)">
+    <ellipse cx="24" cy="34" rx="28" ry="7" fill="#1b1812" opacity="0.4"/>
+    <rect width="48" height="32" fill="#55432e" stroke="#241d14" stroke-width="2"/>
+    <path d="M-6 2L24 -16L54 2Z" fill="#7a5f39" stroke="#241d14" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="34" y="-30" width="8" height="26" fill="#2c241a" stroke="#1a1510"/>
+    <circle class="svg-smoke" cx="38" cy="-36" r="5" fill="#8a8474" opacity="0.18"/>
+  </g>
+
+  <!-- рынок третьей стадии -->
+  <g transform="translate(330,118)">
+    <ellipse cx="28" cy="36" rx="34" ry="8" fill="#1b1812" opacity="0.4"/>
+    <rect width="56" height="30" fill="#6b5333" stroke="#241d14" stroke-width="1.5"/>
+    <path d="M-7 2L28 -20L63 2Z" fill="#7a5a34" stroke="#241d14" stroke-width="1.5" stroke-linejoin="round"/>
+    <rect x="8" y="10" width="40" height="4" fill="#8a7440" opacity="0.45"/>
+    <rect x="8" y="19" width="40" height="4" fill="#8a7440" opacity="0.3"/>
+  </g>
+  <g transform="translate(400,132)">
+    <ellipse cx="20" cy="26" rx="24" ry="6" fill="#1b1812" opacity="0.35"/>
+    <rect width="40" height="22" fill="#5c4830" stroke="#241d14" stroke-width="1.5"/>
+    <path d="M-5 1L20 -14L45 1Z" fill="#6d5634" stroke="#241d14" stroke-width="1.5" stroke-linejoin="round"/>
+  </g>
+  <g transform="translate(118,230)">
+    <ellipse cx="26" cy="42" rx="30" ry="8" fill="#1b1812" opacity="0.4"/>
+    <rect width="52" height="38" fill="#4f3f2b" stroke="#241d14" stroke-width="2"/>
+    <path d="M-8 0L26 -26L60 0Z" fill="#755a36" stroke="#241d14" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="20" y="20" width="12" height="18" fill="#171310"/>
+  </g>
+
+  <!-- деревья -->
+  <g fill="#33402a">
+    <circle cx="36" cy="42" r="22"/>
+    <circle cx="92" cy="30" r="16"/>
+    <circle cx="140" cy="52" r="20"/>
+    <circle cx="196" cy="28" r="15"/>
+    <circle cx="250" cy="46" r="18"/>
+    <circle cx="300" cy="26" r="16"/>
+    <circle cx="356" cy="50" r="20"/>
+    <circle cx="420" cy="30" r="17"/>
+    <circle cx="478" cy="48" r="20"/>
+    <circle cx="540" cy="28" r="16"/>
+    <circle cx="596" cy="52" r="20"/>
+    <circle cx="660" cy="34" r="18"/>
+    <circle cx="724" cy="50" r="22"/>
+    <circle cx="778" cy="28" r="16"/>
+    <circle cx="26" cy="142" r="18"/>
+    <circle cx="44" cy="190" r="16"/>
+    <circle cx="20" cy="230" r="14"/>
+  </g>
+  <g stroke="#3b3022" stroke-width="4" stroke-linecap="round">
+    <path d="M36 64V86"/>
+    <path d="M92 46V68"/>
+    <path d="M140 72V94"/>
+    <path d="M196 43V64"/>
+    <path d="M250 64V86"/>
+    <path d="M300 42V62"/>
+    <path d="M356 70V92"/>
+    <path d="M420 47V68"/>
+    <path d="M478 68V90"/>
+    <path d="M540 44V64"/>
+    <path d="M596 72V94"/>
+    <path d="M660 52V74"/>
+    <path d="M724 72V94"/>
+    <path d="M778 44V64"/>
+    <path d="M26 160V182"/>
+    <path d="M44 206V226"/>
+    <path d="M20 244V262"/>
+  </g>
+
+  <!-- смотровая вышка (появляется после стройки) -->
+  <g class="watchtower" transform="translate(582,320)">
+    <ellipse cx="0" cy="30" rx="16" ry="5" fill="#1b1812" opacity="0.4"/>
+    <rect x="-8" y="-10" width="16" height="38" fill="#55432e" stroke="#241d14" stroke-width="1.5"/>
+    <path d="M-14 -10L0 -26L14 -10Z" fill="#7a5f39" stroke="#241d14" stroke-width="1.5" stroke-linejoin="round"/>
+    <rect x="-3" y="2" width="6" height="8" fill="#171310"/>
+  </g>
+
+  <!-- трава и цветы на лугу -->
+  <g stroke="#55603a" stroke-width="2" fill="none" opacity="0.6">
+    <path d="M660 160c2-8 3-12 6-16M668 160c-1-6-3-10-6-14"/>
+    <path d="M710 210c2-8 3-12 6-16M718 210c-1-6-3-10-6-14"/>
+    <path d="M760 160c2-7 2-11 5-15M768 160c0-6-2-9-4-13"/>
+    <path d="M690 340c2-7 3-10 6-14M698 340c-1-5-3-9-6-12"/>
+  </g>
+  <g fill="#8a8a4a" opacity="0.75">
+    <circle cx="686" cy="184" r="2"/>
+    <circle cx="730" cy="252" r="2"/>
+    <circle cx="654" cy="292" r="2"/>
+    <circle cx="772" cy="300" r="2"/>
+    <circle cx="706" cy="156" r="2"/>
+  </g>
+
+  <!-- камни у ручья -->
+  <g fill="#4b4638" stroke="#23201a" stroke-width="1">
+    <ellipse cx="606" cy="470" rx="7" ry="4"/>
+    <ellipse cx="688" cy="428" rx="6" ry="3.5"/>
+    <ellipse cx="752" cy="398" rx="5" ry="3"/>
+  </g>
+</svg>

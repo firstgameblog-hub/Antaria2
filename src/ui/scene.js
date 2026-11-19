@@ -71,4 +71,6 @@ function syncBuildings() {
 
   host.dataset.elderLevel = String(state.buildings.elder_hut?.level ?? 1);
   host.dataset.watchtower = (state.buildings.watchtower?.level ?? 0) > 0 ? '1' : '0';
+  host.dataset.barn = (state.buildings.barn?.level ?? 0) > 0 ? '1' : '0';
+  host.dataset.smithy = (state.buildings.smithy?.level ?? 0) > 0 ? '1' : '0';
 }

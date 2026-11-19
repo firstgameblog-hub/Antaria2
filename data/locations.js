@@ -100,6 +100,33 @@ export const LOCATIONS = {
     ],
   },
 
+  forest: {
+    id: 'forest',
+    name: 'Глухой бор',
+    stageFrom: 2,
+    map: { left: 9, top: 8 },
+    description:
+      'Лесная чаща за околицей. Тропы узкие, зверь осторожный, зато добыча сытная.',
+    nodes: [
+      {
+        id: 'forest_game',
+        title: 'Заячьи тропы',
+        resource: 'meat',
+        amount: 2,
+        seconds: 4.2,
+        text: 'Заячьи следы в подлеске. С ножом и терпением здесь можно взять дичь.',
+      },
+      {
+        id: 'forest_hide',
+        title: 'Следы зверя',
+        resource: 'hide',
+        amount: 1,
+        seconds: 4.8,
+        text: 'Клочья шерсти на колючем кусте. Зверь близко — и шкура того стоит.',
+      },
+    ],
+  },
+
   palisade: {
     id: 'palisade',
     name: 'Частокол у ворот',

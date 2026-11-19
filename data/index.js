@@ -120,7 +120,13 @@ export function validateData() {
       problems.push(`Квест "${quest.id}": нет главы ${quest.chapter}`);
     }
     for (const step of quest.steps) {
-      if (step.flag !== undefined) continue;
+      if (step.flag !== undefined || step.building !== undefined) {
+        if (step.building && !BUILDINGS[step.building]) {
+          problems.push(`Квест "${quest.id}": нет постройки "${step.building}" в шаге`);
+        }
+        continue;
+      }
+
       if (step.counter !== 'palisade' && !RESOURCES[step.counter]) {
         problems.push(`Квест "${quest.id}": неизвестный счётчик "${step.counter}"`);
       }

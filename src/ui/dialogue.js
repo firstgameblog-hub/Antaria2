@@ -8,6 +8,7 @@ import {
   acceptAskoldOrder,
   acceptElderTask,
   canDeliverAskoldOrder,
+  finishStage2,
   deliverAskoldOrder,
   payElderTithe,
 } from '../systems/story.js';
@@ -183,6 +184,95 @@ export function openElder() {
   const trade = { label: '«Показать товар.»', effect: () => { closeDialogue(); openTab('trade'); } };
 
   let dialogue;
+
+  const state = store.state;
+
+  if (state.stage >= 2) {
+    if (!flags.chapter2_reported) {
+      const smithy = state.buildings.smithy?.level ?? 0;
+      const tools =
+        (state.resources.knife ?? 0) >= 1 && (state.resources.axe ?? 0) >= 1;
+      const supplies =
+        (state.resources.meat ?? 0) >= 3 && (state.resources.hide ?? 0) >= 1;
+
+      if (smithy < 1) {
+        dialogue = {
+          speaker: 'Радим',
+          role: 'староста',
+          nodes: {
+            start: {
+              text: [
+                '— Кузница? Нет кузницы. Строй — потом поговорим.',
+                '— Без своего горна мы так и будем покупать гвозди у Аскольда.',
+              ],
+              choices: [{ label: '«Понял, отец.»', close: true }],
+            },
+          },
+        };
+      } else if (!tools) {
+        dialogue = {
+          speaker: 'Радим',
+          role: 'староста',
+          nodes: {
+            start: {
+              text: [
+                '— Инструмент где? Нож и топор. Кузнец без дела не сидит.',
+                '— Сделай инструмент — тогда и в лес, и к Мирне, и к камню.',
+              ],
+              choices: [{ label: '«Сделаю.»', close: true }],
+            },
+          },
+        };
+      } else if (!supplies) {
+        dialogue = {
+          speaker: 'Радим',
+          role: 'староста',
+          nodes: {
+            start: {
+              text: [
+                '— Мясо и шкура. Глухой бор ждёт.',
+                '— Без припасов зима съест нас быстрее бандитов.',
+              ],
+              choices: [{ label: '«Пойду на охоту.»', close: true }],
+            },
+          },
+        };
+      } else {
+        dialogue = {
+          speaker: 'Радим',
+          role: 'староста',
+          nodes: {
+            start: {
+              text: [
+                '— Мясо есть, инструмент есть. Зима не страшна.',
+                '— Двадцать серебра за работу. Деревня растёт, сын.',
+              ],
+              choices: [
+                { label: '«Спасибо, отец.»', effect: finishStage2, close: true },
+              ],
+            },
+          },
+        };
+      }
+    } else {
+      dialogue = {
+        speaker: 'Радим',
+        role: 'староста',
+        nodes: {
+          start: {
+            text: [
+              '— Кузница дымит, кладовая полна. Продолжай, сын.',
+              '— Деревня растёт. Глядишь, скоро о нас заговорят соседи.',
+            ],
+            choices: [{ label: '«Постараюсь, отец.»', close: true }],
+          },
+        },
+      };
+    }
+
+    openDialogue(dialogue);
+    return;
+  }
 
   if (!flags.chapter1_first_steps_done) {
     dialogue = {

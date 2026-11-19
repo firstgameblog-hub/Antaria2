@@ -11,6 +11,19 @@ import { checkChapterQuest } from './quests.js';
 
 const DEFAULT_GATHER_SECONDS = 2.5;
 
+/** Какой инструмент ускоряет и увеличивает добычу ресурса. */
+const TOOL_FOR_RESOURCE = {
+  herb: 'knife',
+  branch: 'axe',
+  stone: 'pickaxe',
+};
+
+function toolBonus(resourceId) {
+  const tool = TOOL_FOR_RESOURCE[resourceId];
+  if (!tool) return 0;
+  return (store.state.resources[tool] ?? 0) > 0 ? 1 : 0;
+}
+
 /** Текущий сбор: только один за раз. */
 let activeGather = null;
 
@@ -63,9 +76,12 @@ export function gather(nodeId) {
   }
 
   const seconds = found.node.seconds ?? DEFAULT_GATHER_SECONDS;
+  const bonus = toolBonus(found.node.resource);
+
   activeGather = {
     nodeId,
-    charges,
+    charges: charges + bonus,
+    bonus,
     startedAt: performance.now(),
     duration: Math.max(0.5, seconds) * 1000,
     intervalId: 0,
@@ -125,10 +141,23 @@ function finishGather() {
     if (node.resource === 'berry') {
       state.stats.berryGathered = (state.stats.berryGathered ?? 0) + job.charges;
     }
+
+    if (node.resource === 'branch') {
+      state.stats.branchGathered = (state.stats.branchGathered ?? 0) + job.charges;
+    }
+
+    if (node.resource === 'stone') {
+      state.stats.stoneGathered = (state.stats.stoneGathered ?? 0) + job.charges;
+    }
   });
 
   bus.emit('gather:finished', { nodeId: job.nodeId });
-  bus.emit('ui:toast', `Собрано: ${RESOURCES[node.resource].name} +${job.charges}.`);
+
+  const suffix = job.bonus > 0 ? ' — с инструментом' : '';
+  bus.emit(
+    'ui:toast',
+    `Собрано: ${RESOURCES[node.resource].name} +${job.charges}${suffix}.`,
+  );
   checkChapterQuest();
 }
 

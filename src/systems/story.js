@@ -62,6 +62,38 @@ export function payElderTithe() {
   return true;
 }
 
+export function canReportStage2() {
+  const state = store.state;
+
+  return (
+    state.stage === 2 &&
+    (state.buildings.smithy?.level ?? 0) > 0 &&
+    (state.resources.knife ?? 0) >= 1 &&
+    (state.resources.axe ?? 0) >= 1 &&
+    (state.resources.meat ?? 0) >= 3 &&
+    (state.resources.hide ?? 0) >= 1
+  );
+}
+
+export function finishStage2() {
+  if (store.state.flags.chapter2_reported) return false;
+
+  store.update((state) => {
+    state.flags.chapter2_reported = true;
+    state.flags.visited_yard_stage2 = true;
+    state.resources.coin += 20;
+  });
+
+  addChronicleEntry(
+    'Кузница и припасы',
+    'Кузница работает, инструмент есть, мясо и шкура добыты. ' +
+      'Радим доволен: деревня оживает.',
+  );
+
+  bus.emit('ui:toast', 'Староста заплатил 20 серебра.');
+  return true;
+}
+
 export function canDeliverAskoldOrder() {
   const state = store.state;
   return (

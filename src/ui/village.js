@@ -11,6 +11,7 @@ import {
   getActiveGather,
 } from '../systems/gathering.js';
 import { getActiveQuest } from '../systems/quests.js';
+import { canReportStage2 } from '../systems/story.js';
 import {
   REPAIR_COST,
   REPAIR_SECONDS,
@@ -125,6 +126,16 @@ function selectLocation(id) {
   ) {
     store.update((state) => {
       state.flags.visited_yard_final = true;
+    });
+  }
+
+  if (
+    id === 'yard' &&
+    canReportStage2() &&
+    !store.state.flags.visited_yard_stage2
+  ) {
+    store.update((state) => {
+      state.flags.visited_yard_stage2 = true;
     });
   }
 

@@ -11,6 +11,8 @@ const KIND_LABEL = {
   mineral: 'камень',
   product: 'товар',
   material: 'материал',
+  food: 'еда',
+  tool: 'инструмент',
   currency: 'серебро',
 };
 

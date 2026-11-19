@@ -14,7 +14,11 @@ let timers = [];
 
 function progressText(goal) {
   if (goal.type === 'building') {
-    return `${Math.round(goal.progress * 100)}% из ${Math.round(goal.amount * 100)}%`;
+    if (goal.field === 'integrity') {
+      return `${Math.round(goal.progress * 100)}% из ${Math.round(goal.amount * 100)}%`;
+    }
+
+    return `${Math.floor(goal.progress)} из ${goal.amount}`;
   }
 
   return `${Math.floor(goal.progress)} из ${goal.amount}`;

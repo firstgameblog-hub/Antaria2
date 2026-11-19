@@ -1013,7 +1013,9 @@ body.is-modal {
 
 .elder-hut-l2,
 .elder-hut-l3,
-.watchtower {
+.watchtower,
+.stage2-barn,
+.stage2-smithy {
   display: none;
 }
 
@@ -1027,6 +1029,14 @@ body.is-modal {
 }
 
 [data-watchtower="1"] .watchtower {
+  display: block;
+}
+
+[data-barn="1"] .stage2-barn {
+  display: block;
+}
+
+[data-smithy="1"] .stage2-smithy {
   display: block;
 }
 

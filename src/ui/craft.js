@@ -6,6 +6,7 @@ import { bus } from '../core/events.js';
 import { store } from '../core/state.js';
 import { absoluteMinutes, formatDuration } from '../core/time.js';
 import { canCraft, craft, remainingMinutes } from '../systems/crafting.js';
+import { hasCraftStation } from '../systems/buildings.js';
 import { el } from './dom.js';
 
 const STATION_NAMES = {
@@ -15,7 +16,9 @@ const STATION_NAMES = {
 
 function visibleRecipes() {
   return Object.values(RECIPES).filter(
-    (recipe) => Math.min(...recipe.stages) <= store.state.stage,
+    (recipe) =>
+      Math.min(...recipe.stages) <= store.state.stage &&
+      hasCraftStation(recipe.station),
   );
 }
 

@@ -143,13 +143,13 @@
   </g>
 
   <!-- новые постройки второй стадии -->
-  <g transform="translate(108,146)">
+  <g class="stage2-barn" transform="translate(108,146)">
     <ellipse cx="26" cy="38" rx="30" ry="8" fill="#1b1812" opacity="0.4"/>
     <rect width="52" height="36" fill="#4f3f2b" stroke="#241d14" stroke-width="2"/>
     <path d="M-6 2L26 -18L58 2Z" fill="#6b5333" stroke="#241d14" stroke-width="2" stroke-linejoin="round"/>
     <rect x="20" y="18" width="12" height="18" fill="#171310"/>
   </g>
-  <g transform="translate(486,148)">
+  <g class="stage2-smithy" transform="translate(486,148)">
     <ellipse cx="24" cy="34" rx="28" ry="7" fill="#1b1812" opacity="0.4"/>
     <rect width="48" height="32" fill="#55432e" stroke="#241d14" stroke-width="2"/>
     <path d="M-6 2L24 -16L54 2Z" fill="#6d5634" stroke="#241d14" stroke-width="2" stroke-linejoin="round"/>

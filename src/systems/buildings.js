@@ -18,6 +18,19 @@ export function getBuildingRecord(id) {
   return store.state.buildings[id] ?? null;
 }
 
+/** Есть ли в деревне действующая станция крафта. */
+export function hasCraftStation(station) {
+  for (const def of Object.values(BUILDINGS)) {
+    const record = store.state.buildings[def.id];
+    if (!record || !record.level) continue;
+
+    const level = def.levels[record.level - 1];
+    if (level?.effects?.craftStations?.includes(station)) return true;
+  }
+
+  return false;
+}
+
 /** Следующий уровень для постройки или null, если дальше некуда. */
 export function getNextLevel(def) {
   const record = getBuildingRecord(def.id);
