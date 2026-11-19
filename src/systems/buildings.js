@@ -207,6 +207,24 @@ export function formatEffects(effects = {}) {
     .join(', ');
 }
 
+/** Вместимость склада: базовая 150 плюс эффекты построек. */
+export function storageCap() {
+  return 150 + getVillageEffects().storage;
+}
+
+/** Сколько места занято: всё, кроме серебра и инструментов. */
+export function storageUsed() {
+  const state = store.state;
+  let total = 0;
+
+  for (const resource of Object.values(RESOURCES)) {
+    if (resource.kind === 'currency' || resource.kind === 'tool') continue;
+    total += state.resources[resource.id] ?? 0;
+  }
+
+  return total;
+}
+
 /** Данные для карточки стройки. */
 export function getBuildView(def) {
   const record = getBuildingRecord(def.id);

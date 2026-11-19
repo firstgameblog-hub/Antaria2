@@ -77,4 +77,14 @@ export const RECIPES = {
     output: { pickaxe: 1 },
     lore: 'Кирка для камня. С ней брод перестаёт быть просто бродом.',
   },
+  herbal_brew: {
+    id: 'herbal_brew',
+    name: 'Двойной отвар',
+    station: 'herb_hut',
+    minutes: 50,
+    stages: [2],
+    ingredients: { herb: 4, berry: 1 },
+    output: { potion: 2 },
+    lore: 'Мирна говорит: в тепле и трава отдаёт вдвое больше. Две порции из одного котла.',
+  },
 };

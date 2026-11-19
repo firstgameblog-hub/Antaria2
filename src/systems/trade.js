@@ -4,11 +4,16 @@ import { RESOURCES } from '../../data/resources.js';
 import { TRADER } from '../../data/traders.js';
 import { bus } from '../core/events.js';
 import { store } from '../core/state.js';
+import { getVillageEffects } from './buildings.js';
 
 const roundPrice = (value) => Math.max(1, Math.round(value));
 
 function tradeBonus() {
   return Math.max(0, store.state.player.trade - 3) * 0.03;
+}
+
+function comfortBonus() {
+  return Math.min(0.15, getVillageEffects().comfort * 0.01);
 }
 
 export function buyPrice(resourceId) {
@@ -18,7 +23,7 @@ export function buyPrice(resourceId) {
 
 export function sellPrice(resourceId) {
   const base = RESOURCES[resourceId]?.price ?? 1;
-  return roundPrice(base * TRADER.sellMarkup * (1 + tradeBonus()));
+  return roundPrice(base * TRADER.sellMarkup * (1 + tradeBonus() + comfortBonus()));
 }
 
 export function stockOf(resourceId) {

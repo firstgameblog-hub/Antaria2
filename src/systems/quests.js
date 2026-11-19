@@ -80,6 +80,26 @@ export function getActiveQuest() {
       return getQuestViewById('chapter2_hunt');
     }
 
+    if ((state.buildings.barn?.level ?? 0) < 1) {
+      return getQuestViewById('chapter2_barn');
+    }
+
+    if ((state.buildings.elder_hut?.level ?? 0) < 2) {
+      return getQuestViewById('chapter2_family');
+    }
+
+    if ((state.buildings.watchtower?.level ?? 0) < 1) {
+      return getQuestViewById('chapter2_watch');
+    }
+
+    if ((state.buildings.campfire?.level ?? 0) < 2) {
+      return getQuestViewById('chapter2_hearth');
+    }
+
+    if ((state.buildings.herb_hut?.level ?? 0) < 1) {
+      return getQuestViewById('chapter2_herbalist');
+    }
+
     if (!flags.chapter2_reported) {
       return getQuestViewById('chapter2_report');
     }

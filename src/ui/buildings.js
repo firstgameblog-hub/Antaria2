@@ -11,6 +11,8 @@ import {
   getBuildView,
   getVillageEffects,
   maxWorkers,
+  storageCap,
+  storageUsed,
   workersBusy,
 } from '../systems/buildings.js';
 import { el } from './dom.js';
@@ -161,7 +163,7 @@ function renderEffects() {
 
   const rows = [
     ['Жильё', `${effects.housing} (${state.population} занято)`],
-    ['Склад', effects.storage > 0 ? String(effects.storage) : 'нет'],
+    ['Склад', `${storageUsed()} / ${storageCap()}`],
     ['Защита', String(effects.defense)],
     ['Уют', String(effects.comfort)],
     ['Еда', String(effects.food)],

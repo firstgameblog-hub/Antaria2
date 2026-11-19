@@ -30,6 +30,7 @@ import { initDialogue } from './ui/dialogue.js';
 import { toast } from './ui/toast.js';
 import { processCrafting } from './systems/crafting.js';
 import { processConstruction } from './systems/buildings.js';
+import { checkStage2Milestones } from './systems/story.js';
 import { checkChapterQuest } from './systems/quests.js';
 import { validateData } from '../data/index.js';
 
@@ -203,9 +204,10 @@ function initLoopHooks() {
     save('auto');
   });
 
-  // Крафт завершается по игровым минутам.
+  // Крафт и стройка завершаются по игровым минутам.
   bus.on('time:minute', processCrafting);
   bus.on('time:minute', processConstruction);
+  bus.on('time:minute', checkStage2Milestones);
 
   // Страховка при закрытии вкладки.
   window.addEventListener('beforeunload', () => {
@@ -242,6 +244,7 @@ function boot() {
   // Догоняем крафт и стройку, которые могли завершиться до загрузки страницы.
   processCrafting();
   processConstruction();
+  checkStage2Milestones();
   checkChapterQuest();
 
   startLoop();

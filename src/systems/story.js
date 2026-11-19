@@ -68,6 +68,11 @@ export function canReportStage2() {
   return (
     state.stage === 2 &&
     (state.buildings.smithy?.level ?? 0) > 0 &&
+    (state.buildings.barn?.level ?? 0) > 0 &&
+    (state.buildings.elder_hut?.level ?? 0) >= 2 &&
+    (state.buildings.watchtower?.level ?? 0) > 0 &&
+    (state.buildings.campfire?.level ?? 0) >= 2 &&
+    (state.buildings.herb_hut?.level ?? 0) > 0 &&
     (state.resources.knife ?? 0) >= 1 &&
     (state.resources.axe ?? 0) >= 1 &&
     (state.resources.meat ?? 0) >= 3 &&
@@ -75,8 +80,78 @@ export function canReportStage2() {
   );
 }
 
-export function finishStage2() {
-  if (store.state.flags.chapter2_reported) return false;
+const STAGE2_MILESTONES = [
+  {
+    flag: 'chapter2_barn_done',
+    building: 'barn',
+    level: 1,
+    title: 'Кладовая',
+    text: 'Склад готов. Мясо и шкуры больше не гниют под дождём.',
+  },
+  {
+    flag: 'chapter2_family_done',
+    building: 'elder_hut',
+    level: 2,
+    title: 'Семья из Лозичей',
+    text:
+      'Семья из Лозичей перебралась в дом старосты. ' +
+      'В деревне стало на четыре души больше.',
+    population: 4,
+  },
+  {
+    flag: 'chapter2_watch_done',
+    building: 'watchtower',
+    level: 1,
+    title: 'Дозор',
+    text: 'На вышке теперь есть дозорный. На тракте стало спокойнее.',
+  },
+  {
+    flag: 'chapter2_hearth_done',
+    building: 'campfire',
+    level: 2,
+    title: 'Тёплый очаг',
+    text: 'Костёр укрыт навесом. У огня можно собраться даже в дождь.',
+  },
+  {
+    flag: 'chapter2_herb_done',
+    building: 'herb_hut',
+    level: 1,
+    title: 'Дом травника',
+    text:
+      'У Мирны теперь есть дом с полками и печью. В тепле трава отдаёт вдвое больше — ' +
+      'в котле можно варить двойной отвар.',
+  },
+];
+
+/** Награды за постройки второй стадии: семья, дозор, кладовая, очаг. */
+export function checkStage2Milestones() {
+  const state = store.state;
+  if (state.stage < 2) return false;
+
+  let changed = false;
+
+  for (const milestone of STAGE2_MILESTONES) {
+    if (state.flags[milestone.flag]) continue;
+    if ((state.buildings[milestone.building]?.level ?? 0) < milestone.level) {
+      continue;
+    }
+
+    store.update((current) => {
+      current.flags[milestone.flag] = true;
+      if (milestone.population) {
+        current.population += milestone.population;
+      }
+    });
+
+    addChronicleEntry(milestone.title, milestone.text);
+    bus.emit('ui:toast', `${milestone.title}: готово.`);
+    changed = true;
+  }
+
+  return changed;
+}
+
+export function finishStage2() {  if (store.state.flags.chapter2_reported) return false;
 
   store.update((state) => {
     state.flags.chapter2_reported = true;

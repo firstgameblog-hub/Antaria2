@@ -2,7 +2,7 @@
 
 import { bus } from '../core/events.js';
 import { store } from '../core/state.js';
-import { checkChapterQuest } from '../systems/quests.js';
+import { checkChapterQuest, getActiveQuest } from '../systems/quests.js';
 import {
   ELDER_TITHE,
   acceptAskoldOrder,
@@ -189,55 +189,10 @@ export function openElder() {
 
   if (state.stage >= 2) {
     if (!flags.chapter2_reported) {
-      const smithy = state.buildings.smithy?.level ?? 0;
-      const tools =
-        (state.resources.knife ?? 0) >= 1 && (state.resources.axe ?? 0) >= 1;
-      const supplies =
-        (state.resources.meat ?? 0) >= 3 && (state.resources.hide ?? 0) >= 1;
+      const active = getActiveQuest();
+      const questId = active?.quest.id;
 
-      if (smithy < 1) {
-        dialogue = {
-          speaker: 'Радим',
-          role: 'староста',
-          nodes: {
-            start: {
-              text: [
-                '— Кузница? Нет кузницы. Строй — потом поговорим.',
-                '— Без своего горна мы так и будем покупать гвозди у Аскольда.',
-              ],
-              choices: [{ label: '«Понял, отец.»', close: true }],
-            },
-          },
-        };
-      } else if (!tools) {
-        dialogue = {
-          speaker: 'Радим',
-          role: 'староста',
-          nodes: {
-            start: {
-              text: [
-                '— Инструмент где? Нож и топор. Кузнец без дела не сидит.',
-                '— Сделай инструмент — тогда и в лес, и к Мирне, и к камню.',
-              ],
-              choices: [{ label: '«Сделаю.»', close: true }],
-            },
-          },
-        };
-      } else if (!supplies) {
-        dialogue = {
-          speaker: 'Радим',
-          role: 'староста',
-          nodes: {
-            start: {
-              text: [
-                '— Мясо и шкура. Глухой бор ждёт.',
-                '— Без припасов зима съест нас быстрее бандитов.',
-              ],
-              choices: [{ label: '«Пойду на охоту.»', close: true }],
-            },
-          },
-        };
-      } else {
+      if (questId === 'chapter2_report') {
         dialogue = {
           speaker: 'Радим',
           role: 'староста',
@@ -250,6 +205,34 @@ export function openElder() {
               choices: [
                 { label: '«Спасибо, отец.»', effect: finishStage2, close: true },
               ],
+            },
+          },
+        };
+      } else {
+        const hints = {
+          chapter2_smithy: '— Кузница? Нет кузницы. Строй — потом поговорим.',
+          chapter2_tools:
+            '— Инструмент где? Нож и топор. Кузнец без дела не сидит.',
+          chapter2_hunt:
+            '— Мясо и шкура. Глухой бор ждёт. Без припасов зима съест нас быстрее бандитов.',
+          chapter2_barn: '— Добыча есть, а хранить негде. Поставь склад.',
+          chapter2_family:
+            '— Семье из Лозичей нужна крыша. Расширь дом старосты.',
+          chapter2_watch:
+            '— На тракте чужие следы. Поставь вышку, пусть дозорят.',
+          chapter2_hearth:
+            '— Ночи холодные. Накрой костёр, пусть людям будет где согреться.',
+          chapter2_herbalist:
+            '— Мирна мёрзнет над котлом. Поставь ей дом — с полками и печью.',
+        };
+
+        dialogue = {
+          speaker: 'Радим',
+          role: 'староста',
+          nodes: {
+            start: {
+              text: [hints[questId] ?? '— Сначала закончи дела.', '— Деревня не ждёт.'],
+              choices: [{ label: '«Понял, отец.»', close: true }],
             },
           },
         };

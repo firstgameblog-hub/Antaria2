@@ -5,6 +5,7 @@ import { TRADER } from '../../data/traders.js';
 import { bus } from '../core/events.js';
 import { store } from '../core/state.js';
 import { buy, buyPrice, sell, sellPrice, stockOf } from '../systems/trade.js';
+import { getVillageEffects } from '../systems/buildings.js';
 import { el } from './dom.js';
 
 function renderBuy(state) {
@@ -75,6 +76,9 @@ function render() {
 
   document.querySelector('[data-trade-coin]').textContent = String(state.resources.coin ?? 0);
   document.querySelector('[data-trade-skill]').textContent = String(state.player.trade);
+  document.querySelector('[data-trade-comfort]').textContent = String(
+    Math.min(15, getVillageEffects().comfort),
+  );
 
   renderBuy(state);
   renderSell(state);

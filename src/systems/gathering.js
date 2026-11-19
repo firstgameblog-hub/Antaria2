@@ -7,6 +7,7 @@ import { LOCATIONS } from '../../data/locations.js';
 import { RESOURCES } from '../../data/resources.js';
 import { bus } from '../core/events.js';
 import { store } from '../core/state.js';
+import { storageCap, storageUsed } from './buildings.js';
 import { checkChapterQuest } from './quests.js';
 
 const DEFAULT_GATHER_SECONDS = 2.5;
@@ -77,6 +78,16 @@ export function gather(nodeId) {
 
   const seconds = found.node.seconds ?? DEFAULT_GATHER_SECONDS;
   const bonus = toolBonus(found.node.resource);
+  const used = storageUsed();
+  const cap = storageCap();
+
+  if (used + charges + bonus > cap) {
+    bus.emit(
+      'ui:toast',
+      `Склад полон: ${used} / ${cap}. Продайте товар или постройте склад.`,
+    );
+    return false;
+  }
 
   activeGather = {
     nodeId,
