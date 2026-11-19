@@ -4,10 +4,12 @@ import { bus } from '../core/events.js';
 import { store } from '../core/state.js';
 import { checkChapterQuest } from '../systems/quests.js';
 import {
+  ELDER_TITHE,
   acceptAskoldOrder,
   acceptElderTask,
   canDeliverAskoldOrder,
   deliverAskoldOrder,
+  payElderTithe,
 } from '../systems/story.js';
 import { el } from './dom.js';
 import { lockTime, unlockTime } from './overlay.js';
@@ -249,6 +251,43 @@ export function openElder() {
         },
       },
     };
+  } else if (!flags.elder_final_report) {
+    const coin = store.state.resources.coin ?? 0;
+
+    dialogue = {
+      speaker: 'Радим',
+      role: 'староста',
+      nodes: {
+        start: {
+          text: [
+            '— Вернулся. Аскольд доволен?',
+            '— Тридцать серебра — хорошее начало. Но не всё серебро твоё. ' +
+              'Пятнадцать отдай в общий котёл: семена, смола, соль. Деревня должна жить дальше.',
+          ],
+          choices: [
+            {
+              label: `«Вот ${ELDER_TITHE} серебра.»`,
+              next: () => (payElderTithe() ? 'final' : 'need_money'),
+            },
+            { label: '«Мне нужно собрать серебро.»', close: true },
+          ],
+        },
+        need_money: {
+          text: [
+            `— Не хватает. Нужно ${ELDER_TITHE} серебра, а у тебя ${coin}.`,
+            '— Принеси, когда будет. Деревня подождёт, но недолго.',
+          ],
+          choices: [{ label: '«Принесу.»', close: true }],
+        },
+        final: {
+          text: [
+            '— Пятнадцать серебра в общем котле. Семена куплены, смола будет.',
+            '— Продолжай стараться, сын. Глядишь, деревня окрепнет.',
+          ],
+          choices: [{ label: '«Постараюсь, отец.»', close: true }],
+        },
+      },
+    };
   } else {
     dialogue = {
       speaker: 'Радим',
@@ -256,10 +295,10 @@ export function openElder() {
       nodes: {
         start: {
           text: [
-            '— Слышал, Аскольд доволен. Тридцать серебра — это не много, но начало.',
-            '— Деревня просыпается. Смотри, сын, не разбуди её слишком громко.',
+            '— Пятнадцать серебра в общем котле. Семена куплены, смола будет.',
+            '— Продолжай стараться, сын. Глядишь, деревня окрепнет.',
           ],
-          choices: [{ label: 'Понял, отец.', close: true }],
+          choices: [{ label: '«Постараюсь, отец.»', close: true }],
         },
       },
     };

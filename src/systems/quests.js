@@ -69,6 +69,10 @@ export function getActiveQuest() {
     return getQuestViewById('chapter1_order');
   }
 
+  if (!flags.elder_final_report) {
+    return getQuestViewById('chapter1_return');
+  }
+
   return null;
 }
 

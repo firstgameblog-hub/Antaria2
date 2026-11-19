@@ -44,6 +44,7 @@ function renderCard() {
   }
 
   const goals = getStageGoals();
+  const remaining = goals.filter((goal) => !goal.done);
   const ready = canAdvanceStage();
 
   const card = el('section', `quest-card stage-card${ready ? ' is-ready' : ''}`);
@@ -64,17 +65,21 @@ function renderCard() {
     return;
   }
 
-  const list = el('ol', 'quest-steps');
+  if (remaining.length) {
+    const list = el('ol', 'quest-steps');
 
-  for (const goal of goals) {
-    const item = el('li', `quest-step${goal.done ? ' is-done' : ''}`);
-    item.append(el('span', 'quest-mark', goal.done ? '✓' : '○'));
-    item.append(el('span', 'quest-text', goal.label));
-    item.append(el('span', 'quest-progress', progressText(goal)));
-    list.append(item);
+    for (const goal of remaining) {
+      const item = el('li', 'quest-step');
+      item.append(el('span', 'quest-mark', '○'));
+      item.append(el('span', 'quest-text', goal.label));
+      item.append(el('span', 'quest-progress', progressText(goal)));
+      list.append(item);
+    }
+
+    card.append(list);
+  } else {
+    card.append(el('p', 'muted', 'Все требования выполнены.'));
   }
-
-  card.append(list);
 
   const button = el(
     'button',

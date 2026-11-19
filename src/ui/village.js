@@ -117,6 +117,17 @@ function selectLocation(id) {
     });
   }
 
+  if (
+    id === 'yard' &&
+    store.state.flags.askold_order_done &&
+    !store.state.flags.elder_final_report &&
+    !store.state.flags.visited_yard_final
+  ) {
+    store.update((state) => {
+      state.flags.visited_yard_final = true;
+    });
+  }
+
   render();
 }
 

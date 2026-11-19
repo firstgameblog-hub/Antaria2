@@ -37,6 +37,31 @@ export function acceptAskoldOrder() {
   return true;
 }
 
+export const ELDER_TITHE = 15;
+
+export function payElderTithe() {
+  const state = store.state;
+
+  if ((state.resources.coin ?? 0) < ELDER_TITHE) {
+    return false;
+  }
+
+  store.update((current) => {
+    current.resources.coin -= ELDER_TITHE;
+    current.flags.elder_final_report = true;
+    current.flags.visited_yard_final = true;
+  });
+
+  addChronicleEntry(
+    'Общий котёл',
+    'Староста взял пятнадцать серебра на семена, смолу и соль. ' +
+      'Деревня будет жить дальше — и это только начало.',
+  );
+
+  bus.emit('ui:toast', 'Староста взял 15 серебра на общие нужды.');
+  return true;
+}
+
 export function canDeliverAskoldOrder() {
   const state = store.state;
   return (
