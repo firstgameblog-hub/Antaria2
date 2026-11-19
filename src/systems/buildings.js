@@ -207,9 +207,9 @@ export function formatEffects(effects = {}) {
     .join(', ');
 }
 
-/** Вместимость склада: базовая 150 плюс эффекты построек. */
+/** Вместимость склада: базовая 200 плюс эффекты построек. */
 export function storageCap() {
-  return 150 + getVillageEffects().storage;
+  return 200 + getVillageEffects().storage;
 }
 
 /** Сколько места занято: всё, кроме серебра и инструментов. */

@@ -32,6 +32,11 @@ import { processCrafting } from './systems/crafting.js';
 import { processConstruction } from './systems/buildings.js';
 import { checkStage2Milestones } from './systems/story.js';
 import { checkChapterQuest } from './systems/quests.js';
+import {
+  createStageTwoTestState,
+  giveTestMaterials,
+  startStageTwoTest,
+} from './systems/teststart.js';
 import { validateData } from '../data/index.js';
 
 /** Продолжить с автосохранения, если оно есть. */
@@ -193,6 +198,17 @@ function initSaves() {
     if (!store.state.flags.chapter1_intro_done) openBook();
   });
 
+  document.getElementById('test-stage-2').addEventListener('click', () => {
+    startStageTwoTest();
+    renderSaves();
+    openTab('village');
+  });
+
+  document.getElementById('test-materials').addEventListener('click', () => {
+    giveTestMaterials();
+    renderSaves();
+  });
+
   renderSaves();
   bus.on('save:done', renderSaves);
   bus.on('save:loaded', renderSaves);
@@ -215,6 +231,18 @@ function initLoopHooks() {
   });
 }
 
+function restoreSession() {
+  const params = new URLSearchParams(location.search);
+
+  if (params.get('stage') === '2') {
+    store.replace(createStageTwoTestState());
+    save('auto');
+    return null;
+  }
+
+  return restoreAutoSave();
+}
+
 function boot() {
   bus.on('ui:toast', toast);
 
@@ -223,7 +251,8 @@ function boot() {
     console.warn(`[data] найдены проблемы:\n- ${problems.join('\n- ')}`);
   }
 
-  const resumedDay = restoreAutoSave();
+  const isStageTwoTest = new URLSearchParams(location.search).get('stage') === '2';
+  const resumedDay = restoreSession();
 
   initHud();
   initPanels();
@@ -253,6 +282,10 @@ function boot() {
     openBook();
   } else if (resumedDay) {
     toast(`Продолжаем с дня ${resumedDay}.`);
+  }
+
+  if (isStageTwoTest) {
+    toast('Тестовый старт: стадия II.');
   }
 }
 
