@@ -3,6 +3,7 @@
 import { RESOURCES } from '../../data/resources.js';
 import { bus } from '../core/events.js';
 import { store } from '../core/state.js';
+import { storageCap, storageUsed } from '../systems/buildings.js';
 import { el } from './dom.js';
 
 const KIND_LABEL = {
@@ -81,6 +82,11 @@ function renderStats() {
 function render() {
   renderItems();
   renderStats();
+
+  const storage = document.querySelector('[data-inventory-storage]');
+  if (storage) {
+    storage.textContent = `Склад: ${storageUsed()} / ${storageCap()}`;
+  }
 }
 
 export function initInventory() {

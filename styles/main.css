@@ -273,31 +273,6 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-.resources {
-  list-style: none;
-  margin: 0 0 4px;
-  padding: 0;
-}
-
-.resources li {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  padding: 7px 0;
-  border-bottom: 1px dashed var(--line-soft);
-  font-size: 15px;
-}
-
-.resources li:last-child {
-  border-bottom: 0;
-}
-
-.res-qty {
-  color: var(--gold);
-  font-variant-numeric: tabular-nums;
-}
-
 .debug {
   margin-top: 24px;
   padding: 16px;
